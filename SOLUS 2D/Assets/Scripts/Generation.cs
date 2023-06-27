@@ -24,19 +24,19 @@ public class Generation : MonoBehaviour
         seed = Random.Range(100, 999);
         Random.InitState(seed);
 
-        allTiles = new int[size * 2, size * 2];
+        allTiles = new int[size, size];
 
-        for (int tileRow = 0; tileRow < size * 2; tileRow++)
+        for (int tileRow = 0; tileRow < size; tileRow++)
         {
-            for (int tileCol = 0; tileCol < size * 2; tileCol++)
+            for (int tileCol = 0; tileCol < size; tileCol++)
             {
                 allTiles[tileRow, tileCol] = Random.Range(0, 2);
             }
         }
 
-        for (int tileX = 0; tileX < size * 2; tileX++)
+        for (int tileX = 0; tileX < size; tileX++)
         {
-            for (int tileY = 0; tileY < size * 2; tileY++)
+            for (int tileY = 0; tileY < size; tileY++)
             {
                 if (allTiles[tileX, tileY] == 1)
                 {

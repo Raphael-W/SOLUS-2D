@@ -26,7 +26,6 @@ public class Generation : MonoBehaviour
     private void InitialiseTiles()
     {
         tilemap.ClearAllTiles();
-        Random.InitState(seed);
 
         allTiles = new int[size, size];
 
@@ -42,7 +41,7 @@ public class Generation : MonoBehaviour
         {
             for (int tileY = 0; tileY < size; tileY++)
             {
-                if (allTiles[tileX, tileY] >= density)
+                if (allTiles[tileX, tileY] <= density)
                 {
                     tilemap.SetTile(new Vector3Int(tileX, tileY, 0), mainTile);
                 }

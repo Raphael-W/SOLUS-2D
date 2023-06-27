@@ -173,6 +173,7 @@ MonoBehaviour:
   mainTile: {fileID: 11400000, guid: db9e1290073e3314eb34ac5221c885c6, type: 2}
   size: 1000
   seed: 0
+  density: 27
 --- !u!483693784 &902232160
 TilemapRenderer:
   m_ObjectHideFlags: 0

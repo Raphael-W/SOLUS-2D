@@ -10,18 +10,22 @@ public class Generation : MonoBehaviour
 
     public int size;
     public int seed;
+    [SerializeField] [Range(0, 100)] public int density;
 
     public int[,] allTiles;
 
     // Start is called before the first frame update
     void Start()
     {
+        seed = Random.Range(100, 999);
+        Random.InitState(seed);
+
         InitialiseTiles();
     }
 
     private void InitialiseTiles()
     {
-        seed = Random.Range(100, 999);
+        tilemap.ClearAllTiles();
         Random.InitState(seed);
 
         allTiles = new int[size, size];
@@ -30,7 +34,7 @@ public class Generation : MonoBehaviour
         {
             for (int tileCol = 0; tileCol < size; tileCol++)
             {
-                allTiles[tileRow, tileCol] = Random.Range(0, 2);
+                allTiles[tileRow, tileCol] = Random.Range(0, 100);
             }
         }
 
@@ -38,7 +42,7 @@ public class Generation : MonoBehaviour
         {
             for (int tileY = 0; tileY < size; tileY++)
             {
-                if (allTiles[tileX, tileY] == 1)
+                if (allTiles[tileX, tileY] >= density)
                 {
                     tilemap.SetTile(new Vector3Int(tileX, tileY, 0), mainTile);
                 }

@@ -16,6 +16,11 @@ public class Generation : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        InitialiseTiles();
+    }
+
+    private void InitialiseTiles()
+    {
         seed = Random.Range(100, 999);
         Random.InitState(seed);
 
@@ -39,12 +44,6 @@ public class Generation : MonoBehaviour
                 }
             }
         }
-
-
-    }
-
-    private void InitialiseTile()
-    {
 
     }
 

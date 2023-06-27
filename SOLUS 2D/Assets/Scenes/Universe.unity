@@ -171,9 +171,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tilemap: {fileID: 902232161}
   mainTile: {fileID: 11400000, guid: db9e1290073e3314eb34ac5221c885c6, type: 2}
-  size: 1000
-  seed: 0
-  density: 60
+  size: 500
+  density: 65
+  iterations: 10
 --- !u!483693784 &902232160
 TilemapRenderer:
   m_ObjectHideFlags: 0
@@ -499,7 +499,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1894191298}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 500, y: 500, z: -10}
+  m_LocalPosition: {x: 250, y: 200, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

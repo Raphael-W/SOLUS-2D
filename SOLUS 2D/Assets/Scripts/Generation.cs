@@ -16,9 +16,6 @@ public class Generation : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        //tilemap.SetTile(tilePos, mainTile);
-        //Debug.Log(tilemap.HasTile(tilePos));
-
         seed = Random.Range(100, 999);
         Random.InitState(seed);
 

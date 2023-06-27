@@ -7,15 +7,53 @@ public class Generation : MonoBehaviour
 {
     public Tilemap tilemap;
     public Tile mainTile;
-    public Vector3Int tilePos;
+
+    public int size;
+    public int seed;
+
+    public int[,] allTiles;
 
     // Start is called before the first frame update
     void Start()
     {
-        tilePos = new Vector3Int(0, 0, 0);
         //tilemap.SetTile(tilePos, mainTile);
+        //Debug.Log(tilemap.HasTile(tilePos));
 
-        Debug.Log(tilemap.HasTile(tilePos));
+        seed = Random.Range(100, 999);
+        Random.InitState(seed);
+
+        allTiles = new int[size * 2, size * 2];
+
+        for (int tileRow = 0; tileRow < size * 2; tileRow++)
+        {
+            for (int tileCol = 0; tileCol < size * 2; tileCol++)
+            {
+                allTiles[tileRow, tileCol] = Random.Range(0, 2);
+            }
+        }
+
+        for (int tileX = 0; tileX < size * 2; tileX++)
+        {
+            for (int tileY = 0; tileY < size * 2; tileY++)
+            {
+                if (allTiles[tileX, tileY] == 1)
+                {
+                    tilemap.SetTile(new Vector3Int(tileX, tileY, 0), mainTile);
+                }
+            }
+        }
+
+
+    }
+
+    private void InitialiseTile()
+    {
+
+    }
+
+    private void Excavate()
+    {
+        
     }
 
     // Update is called once per frame

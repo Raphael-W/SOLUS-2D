@@ -172,6 +172,7 @@ MonoBehaviour:
   tilemap: {fileID: 902232161}
   mainTile: {fileID: 11400000, guid: db9e1290073e3314eb34ac5221c885c6, type: 2}
   tilePos: {x: 0, y: 0, z: 0}
+  size: 500
 --- !u!483693784 &902232160
 TilemapRenderer:
   m_ObjectHideFlags: 0

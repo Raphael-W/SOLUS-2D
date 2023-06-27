@@ -21,6 +21,7 @@ public class Generation : MonoBehaviour
         Random.InitState(seed);
 
         InitialiseTiles();
+        DisplayMap();
     }
 
     private void InitialiseTiles()
@@ -36,7 +37,10 @@ public class Generation : MonoBehaviour
                 allTiles[tileRow, tileCol] = Random.Range(0, 100);
             }
         }
+    }
 
+    private void DisplayMap()
+    {
         for (int tileX = 0; tileX < size; tileX++)
         {
             for (int tileY = 0; tileY < size; tileY++)
@@ -47,7 +51,6 @@ public class Generation : MonoBehaviour
                 }
             }
         }
-
     }
 
     private void Excavate()

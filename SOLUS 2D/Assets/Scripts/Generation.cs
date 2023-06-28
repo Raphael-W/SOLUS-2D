@@ -24,7 +24,7 @@ public class Generation : MonoBehaviour
         seed = Random.Range(1000000, 9999999);
         Debug.Log("Seed: " + seed);
 
-        Random.InitState(seed);
+        Random.InitState(8024669);
 
         InitialiseTiles();
 

@@ -11,6 +11,7 @@ public class Movement : MonoBehaviour
     private MvInputKey Key;
     private float speed;
     private Vector2 oldPosition;
+    public Quaternion targetRotation;
 
 
 
@@ -97,7 +98,12 @@ public class Movement : MonoBehaviour
     private void RotatePlayer(float rotationThisFrame)
     {
         rb.freezeRotation = true; //freezing rotation so we can manually rotate
-        transform.Rotate(Vector3.forward * Time.deltaTime * rotationThisFrame);
+        //transform.Rotate(Vector3.forward * Time.deltaTime * rotationThisFrame);
+        //transform.eulerAngles = Vector3.Lerp(Vector3.zero, rotationThisFrame, Time.deltaTime * 5);
+
+        Quaternion desiredRotation = transform.rotation * Quaternion.Euler(Vector3.forward * rotationThisFrame * Time.deltaTime);
+        transform.rotation = Quaternion.Lerp(transform.rotation, desiredRotation, Time.deltaTime * 100f);
+
         rb.freezeRotation = false; //unfreezing rotation so the physics system can take over
     }
 }

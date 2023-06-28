@@ -685,7 +685,7 @@ Rigidbody2D:
   m_Mass: 1
   m_LinearDrag: 0
   m_AngularDrag: 0.05
-  m_GravityScale: 0.5
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -706,13 +706,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 1517356636}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1f732c11dd601cb419dfa1d8ff4214be, type: 3}
+  m_Script: {fileID: 11500000, guid: d975957fa8a7b324ea05040894a49331, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rb: {fileID: 1517356641}
-  targetRotation: {x: 0, y: 0, z: 0, w: 0}
-  mainThrust: 600
-  rotationThrust: 150
+  rb: {fileID: 0}
+  turnSpeed: 5
+  acceleration: 5
+  deceleration: 10
+  targetSpeed: 10
 --- !u!1 &1667583282
 GameObject:
   m_ObjectHideFlags: 0

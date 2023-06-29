@@ -43,7 +43,7 @@ public class Movement : NetworkBehaviour
 
     void Update()
     {
-        if (!IsClient) return;
+        if (!IsOwner) return;
 
         Key = MvInputKey.Key_Neutral;
 

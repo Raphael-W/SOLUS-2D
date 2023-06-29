@@ -12,11 +12,14 @@ public class Movement : MonoBehaviour
     private float speed;
     private Vector2 oldPosition;
     public Quaternion targetRotation;
+    public float rotationMomentum = 0.8f;
 
 
 
     [SerializeField] public float mainThrust = 400000f; //1000
+    //[SerializeField] public float backgroundThrust = 10000;
     [SerializeField] public float rotationThrust = 100f;
+    private float prevRotation = 0f;
 
 
     enum MvInputKey {
@@ -37,14 +40,12 @@ public class Movement : MonoBehaviour
 
         Key = MvInputKey.Key_Neutral;
 
-        if (Input.GetMouseButton(0) || Input.GetKey(KeyCode.A))
-        {
+        if (Input.GetKey(KeyCode.A)) {
             Key = Key | MvInputKey.Key_Left;
 
         }
     
-        if (Input.GetMouseButton(1) || Input.GetKey(KeyCode.D))
-        {
+        if (Input.GetKey(KeyCode.D)) {
             Key = Key | MvInputKey.Key_Right;
 
         }
@@ -76,21 +77,32 @@ public class Movement : MonoBehaviour
     {
         //textLabel.text = "";
 
-        if ((Key & MvInputKey.Key_Left)!=0) {
+        if ((Key & MvInputKey.Key_Left) != 0) {
+            prevRotation = rotationThrust;
             RotatePlayer(rotationThrust);
         }
-        if ((Key & MvInputKey.Key_Right)!=0) {
+        if ((Key & MvInputKey.Key_Right) != 0) {
+            prevRotation = -rotationThrust;
             RotatePlayer(-rotationThrust);
+
         }
         if (Key != MvInputKey.Key_Neutral) {
 
-            if ((Key & MvInputKey.Key_Left)!=0 && (Key & MvInputKey.Key_Right)!=0) {
+            if ((Key & MvInputKey.Key_Left) != 0 && (Key & MvInputKey.Key_Right) != 0) {
                 rb.AddRelativeForce(Vector2.up * mainThrust * Time.deltaTime);
             }
 
             else {
                 rb.AddRelativeForce(Vector2.up * (mainThrust / 2) * Time.deltaTime);
-
+            }
+        }
+        else {
+            if (Mathf.Abs(prevRotation) > 0.1) {
+                prevRotation *= rotationMomentum;
+                RotatePlayer(prevRotation);
+            }
+            else {
+                prevRotation = 0;
             }
 
         }

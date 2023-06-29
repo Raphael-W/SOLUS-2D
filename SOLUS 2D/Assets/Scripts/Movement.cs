@@ -16,7 +16,6 @@ public class Movement : MonoBehaviour
 
 
     [SerializeField] public float mainThrust = 400000f; //1000
-    //[SerializeField] public float backgroundThrust = 10000;
     [SerializeField] public float rotationThrust = 100f;
 
 
@@ -38,12 +37,14 @@ public class Movement : MonoBehaviour
 
         Key = MvInputKey.Key_Neutral;
 
-        if (Input.GetKey(KeyCode.A)) {
+        if (Input.GetMouseButton(0) || Input.GetKey(KeyCode.A))
+        {
             Key = Key | MvInputKey.Key_Left;
 
         }
     
-        if (Input.GetKey(KeyCode.D)) {
+        if (Input.GetMouseButton(1) || Input.GetKey(KeyCode.D))
+        {
             Key = Key | MvInputKey.Key_Right;
 
         }

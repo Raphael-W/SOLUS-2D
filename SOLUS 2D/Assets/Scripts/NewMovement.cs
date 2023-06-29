@@ -14,7 +14,8 @@ public class NewMovement : MonoBehaviour
     public float deceleration;
     public float targetSpeed;
 
-    private float currentSpeed;
+    public float currentSpeed;
+    public Vector3 rotatedDirection;
 
     private void Start()
     {
@@ -30,15 +31,17 @@ public class NewMovement : MonoBehaviour
 
             direction = (mousePosition - transform.position).normalized;
             Quaternion rotation = Quaternion.Euler(0, 0, 0);
-            Vector3 rotatedDirection = rotation * direction;
+            rotatedDirection = rotation * direction;
 
             Quaternion targetRotation = Quaternion.LookRotation(forward: Vector3.forward, upwards: rotatedDirection);
             transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, turnSpeed * Time.deltaTime);
 
             if (currentSpeed < targetSpeed)
             {
-                rb.velocity = transform.forward * currentSpeed;
+                Debug.Log("Moving");
                 currentSpeed += acceleration;
+                Vector2 movementAmount = rotatedDirection * currentSpeed * Time.deltaTime;
+                transform.Translate(-movementAmount);
             }
         }
 
@@ -46,7 +49,8 @@ public class NewMovement : MonoBehaviour
         {
             if (currentSpeed > 0f)
             {
-                rb.velocity = transform.forward * currentSpeed;
+                Vector2 movementAmount = rotatedDirection * currentSpeed * Time.deltaTime;
+                transform.Translate(movementAmount);
                 currentSpeed -= deceleration;
             }
         }

@@ -7,6 +7,8 @@ public class Generation : MonoBehaviour
 {
     public Tilemap tilemap;
     public Tile mainTile;
+    public Tile powerTile;
+    public Tile ammoTile;
 
     public int size;
     private int seed;
@@ -49,12 +51,12 @@ public class Generation : MonoBehaviour
                 allTiles[tileX, tileY] = Random.Range(0, 100);
                 if (allTiles[tileX, tileY] <= density)
                 {
-                    allTiles[tileX, tileY] = 1;
+                    allTiles[tileX, tileY] = 0;
                 }
 
                 else
                 {
-                    allTiles[tileX, tileY] = 0;
+                    allTiles[tileX, tileY] = 1;
                 }
             }
         }
@@ -66,7 +68,7 @@ public class Generation : MonoBehaviour
         {
             for (int tileY = 0; tileY < size; tileY++)
             {
-                if (allTiles[tileX, tileY] == 0)
+                if (allTiles[tileX, tileY] == 1)
                 {
                     tilemap.SetTile(new Vector3Int(tileX, tileY, 0), mainTile);
                 }
@@ -90,14 +92,14 @@ public class Generation : MonoBehaviour
                                     allTiles[tileX + 0, tileY - 1] + //TOP
                                     allTiles[tileX + 1, tileY - 1]; //TOP RIGHT
 
-                if (neighbourCount > 4)
+                if (neighbourCount < 4)
                 {
-                    updatedTiles[tileX, tileY] = 1;
+                    updatedTiles[tileX, tileY] = 0;
                 }
 
                 else
                 {
-                    updatedTiles[tileX, tileY] = 0;
+                    updatedTiles[tileX, tileY] = 1;
                 }
             }
         }

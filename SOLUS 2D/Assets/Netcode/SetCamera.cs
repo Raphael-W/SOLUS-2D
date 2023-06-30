@@ -15,8 +15,10 @@ public class SetCamera : NetworkBehaviour
 
     public override void OnNetworkSpawn()
     {
+
+        if (!IsOwner) return;
         base.OnNetworkSpawn();
-        if (!IsClient) return;
+        
         Initialize();
     }
 }

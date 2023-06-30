@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -21,10 +19,10 @@ public class Generation : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        seed = Random.Range(1000000, 9999999);
+        seed = Random.Range(1000000, 9999999); //8024669
         Debug.Log("Seed: " + seed);
 
-        Random.InitState(8024669);
+        Random.InitState(seed);
 
         InitialiseTiles();
 
@@ -32,6 +30,8 @@ public class Generation : MonoBehaviour
         {
             Excavate();
         }
+
+        PowerPlanets();
 
         DisplayMap();
     }
@@ -105,9 +105,8 @@ public class Generation : MonoBehaviour
         allTiles = updatedTiles;
     }
 
-    // Update is called once per frame
-    void Update()
+    private void PowerPlanets()
     {
-        
+
     }
 }

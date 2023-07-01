@@ -9,12 +9,12 @@ public class Movement : NetworkBehaviour
     private MvInputKey Key;
     private float speed;
     private Vector2 oldPosition;
-    public Quaternion targetRotation;
+    private Quaternion targetRotation;
     public float rotationMomentum = 0.8f;
 
     private Camera mainCamera;
 
-    public GameObject MainUniverse;
+    private GameObject MainUniverse;
 
     [SerializeField] public float mainThrust = 400000f; //1000
     //[SerializeField] public float backgroundThrust = 10000;
@@ -32,7 +32,7 @@ public class Movement : NetworkBehaviour
     {
         mainCamera = Camera.main;
         rb = GetComponent<Rigidbody2D>();
-        //transform.position = new Vector3(250, 200, 0);
+        transform.position = new Vector3Int(250, 200, 0);
     }
 
     public override void OnNetworkSpawn()

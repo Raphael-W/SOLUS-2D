@@ -30,21 +30,27 @@ public class Movement : NetworkBehaviour
 
     private void Initialize()
     {
-        mainCamera = Camera.main;
-        rb = GetComponent<Rigidbody2D>();
-        transform.position = new Vector3Int(250, 200, 0);
+        if (IsOwner)
+        {
+            mainCamera = Camera.main;
+            rb = GetComponent<Rigidbody2D>();
+        }
+        
+        transform.position = new Vector3(250, 200, 0);
     }
 
     public override void OnNetworkSpawn()
     {
-        if (!IsOwner) return;
+        if (IsOwner)
+        {
+            MainUniverse = GameObject.FindGameObjectWithTag("MainUniverseTag");
+            Generation generation = MainUniverse.GetComponent<Generation>();
+            base.OnNetworkSpawn();
 
-        Debug.Log("Spawned");
-        MainUniverse = GameObject.FindGameObjectWithTag("MainUniverseTag");
-        Generation generation = MainUniverse.GetComponent<Generation>();
-        base.OnNetworkSpawn();
+            generation.BeginGeneration(ServerManager.GetSeed());
+        }
 
-        generation.BeginGeneration(ServerManager.GetSeed());
+        
         Initialize();
 
     }

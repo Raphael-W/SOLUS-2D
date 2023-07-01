@@ -804,10 +804,10 @@ RectTransform:
   m_Father: {fileID: 1677950779}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -299.3, y: 215.1}
-  m_SizeDelta: {x: 42.717, y: 30}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 246.39996, y: -41}
+  m_SizeDelta: {x: 42.71701, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1104330190
 MonoBehaviour:
@@ -938,10 +938,10 @@ RectTransform:
   m_Father: {fileID: 1677950779}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -340.7, y: 215.1}
-  m_SizeDelta: {x: 42.717, y: 30}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 204.99994, y: -41}
+  m_SizeDelta: {x: 42.71701, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1270713003
 MonoBehaviour:
@@ -1296,9 +1296,9 @@ RectTransform:
   m_Father: {fileID: 1677950779}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -440.7, y: 215.1}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 105, y: -41}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1558827320
@@ -1576,7 +1576,7 @@ MonoBehaviour:
   NetworkConfig:
     ProtocolVersion: 0
     NetworkTransport: {fileID: 1689070883}
-    PlayerPrefab: {fileID: 6794780098416160025, guid: 36d2b482bd163f24680867af5bbdc9bd, type: 3}
+    PlayerPrefab: {fileID: 1560197103564948255, guid: 36d2b482bd163f24680867af5bbdc9bd, type: 3}
     Prefabs:
       NetworkPrefabsLists:
       - {fileID: 11400000, guid: f9baae1738875904c94f9b24dc708264, type: 2}

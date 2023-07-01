@@ -35,17 +35,10 @@ public class Movement : NetworkBehaviour
         transform.position = new Vector3(250, 200, 0);
     }
 
-    [ServerRpc]
-    private void GetSeedServerRpc()
-    {
-
-    }
-
     public override void OnNetworkSpawn()
     {
         base.OnNetworkSpawn();
         Initialize();
-        GetSeedServerRpc();
     }
 
     void Update()

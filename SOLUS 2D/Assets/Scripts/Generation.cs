@@ -2,13 +2,12 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 using Unity.Netcode;
 
-public class Generation : NetworkBehaviour
+public class Generation : MonoBehaviour
 {
     public Tilemap tilemap;
     public Tile mainTile;
 
     public int size;
-    private NetworkVariable<int> seed = new NetworkVariable<int>();
 
     [SerializeField] [Range(0, 100)] public int density;
     [SerializeField] [Range(1, 20)] public int iterations;
@@ -19,13 +18,11 @@ public class Generation : NetworkBehaviour
     private int neighbourCount;
 
     // Start is called before the first frame update
-    void Start()
+    public void BeginGeneration(int seed)
     {
-        if (!IsClient) return;
-        Debug.Log("IS CLIENT");
-        Debug.Log("Seed: " + seed.Value);
+        Debug.Log("Seed: " + seed);
 
-        Random.InitState(seed.Value);
+        Random.InitState(seed);
 
         InitialiseTiles();
 

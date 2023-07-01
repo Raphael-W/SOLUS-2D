@@ -1672,8 +1672,8 @@ GameObject:
   - component: {fileID: 4686574647862058100}
   - component: {fileID: 854631742925961674}
   - component: {fileID: 753672020280857440}
-  - component: {fileID: 5826924201569176156}
   - component: {fileID: 7970956622099288271}
+  - component: {fileID: 7970956622099288272}
   m_Layer: 0
   m_Name: Main Universe
   m_TagString: Untagged
@@ -1770,23 +1770,6 @@ Transform:
   m_Father: {fileID: 7707551120140389122}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5826924201569176156
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4438433986069650957}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 24386fb2b199d574491581f826f54942, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  tilemap: {fileID: 4686574647862058100}
-  mainTile: {fileID: 11400000, guid: fb4d4c4ed98c5344b8d9ddf4818742ed, type: 2}
-  size: 500
-  density: 65
-  iterations: 10
 --- !u!4 &7707551120140389122
 Transform:
   m_ObjectHideFlags: 0
@@ -1830,6 +1813,23 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!114 &7970956622099288272
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4438433986069650957}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 24386fb2b199d574491581f826f54942, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tilemap: {fileID: 4686574647862058100}
+  mainTile: {fileID: 11400000, guid: fb4d4c4ed98c5344b8d9ddf4818742ed, type: 2}
+  size: 500
+  density: 65
+  iterations: 10
 --- !u!1 &8551988110157376535
 GameObject:
   m_ObjectHideFlags: 0

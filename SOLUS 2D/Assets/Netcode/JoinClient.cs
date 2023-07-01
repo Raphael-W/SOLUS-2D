@@ -1,11 +1,17 @@
 using UnityEngine;
 using Unity.Netcode;
+using UnityEngine.UI;
 
 public class JoinClient : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    public TextMesh IPField;
+    private string InputtedIP;
+
+    public void JoinIP()
     {
+        InputtedIP = IPField.text.ToString();
+        NetworkManager.Singleton.GetComponent<UNetTransport>().ConnectAddress = InputtedIP;
+
         NetworkManager.Singleton.StartClient();
     }
 }

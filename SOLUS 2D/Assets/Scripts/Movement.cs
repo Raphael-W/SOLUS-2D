@@ -37,9 +37,14 @@ public class Movement : NetworkBehaviour
 
     public override void OnNetworkSpawn()
     {
+        if (!IsOwner) return;
+
+        Debug.Log("Spawned");
         Generation generation = gameObject.GetComponent<Generation>();
         base.OnNetworkSpawn();
-        generation.BeginGeneration(ServerManager.getSeed());
+        
+        Debug.Log(ServerManager.GetSeed());
+        generation.BeginGeneration(ServerManager.GetSeed());
         Initialize();
 
     }
@@ -69,7 +74,7 @@ public class Movement : NetworkBehaviour
     void FixedUpdate()
     {
 
-        if (!IsClient) return;
+        if (!IsOwner) return;
 
         ProcessRotation();
         //rb.AddRelativeForce(Vector3.up * mainThrust * Time.deltaTime);

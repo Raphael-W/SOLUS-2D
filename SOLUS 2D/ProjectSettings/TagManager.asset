@@ -5,6 +5,8 @@ TagManager:
   serializedVersion: 2
   tags:
   - MainUniverseTag
+  - ConnectionUI
+  - ServerUI
   layers:
   - Default
   - TransparentFX

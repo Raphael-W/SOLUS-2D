@@ -7,19 +7,18 @@ public class Movement : NetworkBehaviour
 
     public Rigidbody2D rb;
     private MvInputKey Key;
-    private float speed;
-    private Vector2 oldPosition;
-    private Quaternion targetRotation;
-    public float rotationMomentum = 0.8f;
 
-    private Camera mainCamera;
+    private Vector2 oldPosition;
+    public float rotationMomentum = 0.8f;
+    private float speed;
 
     private GameObject MainUniverse;
 
-    [SerializeField] public float mainThrust = 400000f; //1000
-    //[SerializeField] public float backgroundThrust = 10000;
-    [SerializeField] public float rotationThrust = 100f;
+    public float mainThrust = 600;
+    public float rotationThrust = 150f;
     private float prevRotation = 0f;
+
+    private GameObject ConnectionUI;
 
 
     enum MvInputKey {
@@ -32,8 +31,10 @@ public class Movement : NetworkBehaviour
     {
         if (IsOwner)
         {
-            mainCamera = Camera.main;
             rb = GetComponent<Rigidbody2D>();
+
+            ConnectionUI = GameObject.FindGameObjectWithTag("ConnectionUI");
+            ConnectionUI.SetActive(false);
         }
         
         transform.position = new Vector3(250, 200, 0);
@@ -43,10 +44,10 @@ public class Movement : NetworkBehaviour
     {
         if (IsOwner)
         {
-            MainUniverse = GameObject.FindGameObjectWithTag("MainUniverseTag");
-            Generation generation = MainUniverse.GetComponent<Generation>();
             base.OnNetworkSpawn();
 
+            MainUniverse = GameObject.FindGameObjectWithTag("MainUniverseTag");
+            Generation generation = MainUniverse.GetComponent<Generation>();
             generation.BeginGeneration(ServerManager.GetSeed());
         }
 

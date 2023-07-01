@@ -32,7 +32,7 @@ public class Movement : NetworkBehaviour
     {
         mainCamera = Camera.main;
         rb = GetComponent<Rigidbody2D>();
-        transform.position = new Vector3(250, 200, 0);
+        //transform.position = new Vector3(250, 200, 0);
     }
 
     public override void OnNetworkSpawn()

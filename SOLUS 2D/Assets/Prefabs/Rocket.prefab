@@ -184,6 +184,7 @@ MonoBehaviour:
   rb: {fileID: 2713973558167653168}
   targetRotation: {x: 0, y: 0, z: 0, w: 0}
   rotationMomentum: 0.8
+  MainUniverse: {fileID: 0}
   mainThrust: 500
   rotationThrust: 200
 --- !u!114 &587060007953702822

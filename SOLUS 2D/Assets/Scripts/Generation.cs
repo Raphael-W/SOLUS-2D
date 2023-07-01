@@ -6,11 +6,10 @@ public class Generation : NetworkBehaviour
 {
     public Tilemap tilemap;
     public Tile mainTile;
-    public Tile powerTile;
-    public Tile ammoTile;
 
     public int size;
-    private int seed;
+    private NetworkVariable<int> seed = new NetworkVariable<int>();
+
     [SerializeField] [Range(0, 100)] public int density;
     [SerializeField] [Range(1, 20)] public int iterations;
 
@@ -22,13 +21,11 @@ public class Generation : NetworkBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        NetworkManager.Singleton.StartServer();
-        if (!IsServer) return;
+        if (!IsClient) return;
 
-        seed = Random.Range(1000000, 9999999); //8024669
-        Debug.Log("Seed: " + seed);
+        Debug.Log("Seed: " + seed.Value);
 
-        Random.InitState(seed);
+        Random.InitState(seed.Value);
 
         InitialiseTiles();
 
@@ -39,12 +36,6 @@ public class Generation : NetworkBehaviour
 
         DisplayMap();
 
-    }
-
-
-    void OnServerInitialized()
-    {
-        Debug.Log("Server Started");
     }
 
     private void InitialiseTiles()
@@ -114,11 +105,5 @@ public class Generation : NetworkBehaviour
         }
 
         allTiles = updatedTiles;
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }

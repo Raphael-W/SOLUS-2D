@@ -22,7 +22,9 @@ public class Generation : NetworkBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        if (IsClient) return;
+        NetworkManager.Singleton.StartServer();
+        if (!IsServer) return;
+
         seed = Random.Range(1000000, 9999999); //8024669
         Debug.Log("Seed: " + seed);
 
@@ -36,6 +38,13 @@ public class Generation : NetworkBehaviour
         }
 
         DisplayMap();
+
+    }
+
+
+    void OnServerInitialized()
+    {
+        Debug.Log("Server Started");
     }
 
     private void InitialiseTiles()

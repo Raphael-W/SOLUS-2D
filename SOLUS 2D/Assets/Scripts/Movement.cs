@@ -14,7 +14,7 @@ public class Movement : NetworkBehaviour
 
     private Camera mainCamera;
 
-
+    public GameObject MainUniverse;
 
     [SerializeField] public float mainThrust = 400000f; //1000
     //[SerializeField] public float backgroundThrust = 10000;
@@ -40,10 +40,10 @@ public class Movement : NetworkBehaviour
         if (!IsOwner) return;
 
         Debug.Log("Spawned");
-        Generation generation = gameObject.GetComponent<Generation>();
+        MainUniverse = GameObject.FindGameObjectWithTag("MainUniverseTag");
+        Generation generation = MainUniverse.GetComponent<Generation>();
         base.OnNetworkSpawn();
-        
-        Debug.Log(ServerManager.GetSeed());
+
         generation.BeginGeneration(ServerManager.GetSeed());
         Initialize();
 

@@ -1,9 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using Unity.Netcode;
 
-public class Generation : MonoBehaviour
+public class Generation : NetworkBehaviour
 {
     public Tilemap tilemap;
     public Tile mainTile;
@@ -23,10 +22,11 @@ public class Generation : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        if (IsClient) return;
         seed = Random.Range(1000000, 9999999); //8024669
         Debug.Log("Seed: " + seed);
 
-        Random.InitState(8024669);
+        Random.InitState(seed);
 
         InitialiseTiles();
 

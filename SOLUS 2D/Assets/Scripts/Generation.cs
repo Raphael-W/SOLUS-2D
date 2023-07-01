@@ -22,7 +22,7 @@ public class Generation : NetworkBehaviour
     void Start()
     {
         if (!IsClient) return;
-
+        Debug.Log("IS CLIENT");
         Debug.Log("Seed: " + seed.Value);
 
         Random.InitState(seed.Value);

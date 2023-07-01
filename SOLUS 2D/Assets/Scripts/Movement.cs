@@ -27,16 +27,18 @@ public class Movement : NetworkBehaviour
         Key_Right = 2,
     };
 
-    private void Initialize()
+    [ClientRpc]
+    public void MapResetClientRpc(bool ServerChange, int CurrentSeed)
     {
-        if (IsOwner)
+        Debug.Log("Recieved");
+        if (IsOwner || ServerChange)
         {
-            rb = GetComponent<Rigidbody2D>();
-
-            ConnectionUI = GameObject.FindGameObjectWithTag("ConnectionUI");
-            ConnectionUI.SetActive(false);
+            Debug.Log("Server Change");
+            MainUniverse = GameObject.FindGameObjectWithTag("MainUniverseTag");
+            Generation generation = MainUniverse.GetComponent<Generation>();
+            generation.BeginGeneration(CurrentSeed);
         }
-        
+
         transform.position = new Vector3(250, 200, 0);
     }
 
@@ -46,13 +48,13 @@ public class Movement : NetworkBehaviour
         {
             base.OnNetworkSpawn();
 
-            MainUniverse = GameObject.FindGameObjectWithTag("MainUniverseTag");
-            Generation generation = MainUniverse.GetComponent<Generation>();
-            generation.BeginGeneration(ServerManager.GetSeed());
+            rb = GetComponent<Rigidbody2D>();
+
+            ConnectionUI = GameObject.FindGameObjectWithTag("ConnectionUI");
+            ConnectionUI.SetActive(false);
         }
 
-        
-        Initialize();
+        MapResetClientRpc(false, ServerManager.GetSeed());
 
     }
 

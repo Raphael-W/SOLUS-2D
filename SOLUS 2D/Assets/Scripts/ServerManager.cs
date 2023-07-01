@@ -3,7 +3,12 @@ using Unity.Netcode;
 
 public class ServerManager : NetworkBehaviour
 {
-    private NetworkVariable<int> seed = new NetworkVariable<int>();
+    private static NetworkVariable<int> seed = new NetworkVariable<int>();
+
+    public static int getSeed()
+    {
+        return seed.Value;
+    }
 
     // Start is called before the first frame update
     void Start()

@@ -37,8 +37,10 @@ public class Movement : NetworkBehaviour
 
     public override void OnNetworkSpawn()
     {
+        Generation generation = gameObject.GetComponent<Generation>();
         base.OnNetworkSpawn();
         Initialize();
+        generation.BeginGeneration(ServerManager.getSeed());
     }
 
     void Update()

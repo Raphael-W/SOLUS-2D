@@ -39,8 +39,9 @@ public class Movement : NetworkBehaviour
     {
         Generation generation = gameObject.GetComponent<Generation>();
         base.OnNetworkSpawn();
-        Initialize();
         generation.BeginGeneration(ServerManager.getSeed());
+        Initialize();
+
     }
 
     void Update()

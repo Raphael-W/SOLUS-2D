@@ -1,23 +1,20 @@
 using UnityEngine;
 using UnityEngine.Tilemaps;
-using Unity.Netcode;
 
 public class Generation : MonoBehaviour
 {
     public Tilemap tilemap;
     public Tile mainTile;
 
-    public int size;
-
-    [SerializeField] [Range(0, 100)] public int density;
-    [SerializeField] [Range(1, 20)] public int iterations;
+    [Range(0, 100)] public int density;
+    [Range(1, 20)] public int iterations;
+    public int MapSize;
 
     private int[,] allTiles;
     private int[,] updatedTiles;
 
     private int neighbourCount;
 
-    // Start is called before the first frame update
     public void BeginGeneration(int seed)
     {
         Debug.Log("Seed: " + seed);
@@ -39,11 +36,11 @@ public class Generation : MonoBehaviour
     {
         tilemap.ClearAllTiles();
 
-        allTiles = new int[size, size];
+        allTiles = new int[MapSize, MapSize];
 
-        for (int tileX = 0; tileX < size; tileX++)
+        for (int tileX = 0; tileX < MapSize; tileX++)
         {
-            for (int tileY = 0; tileY < size; tileY++)
+            for (int tileY = 0; tileY < MapSize; tileY++)
             {
                 allTiles[tileX, tileY] = Random.Range(0, 100);
                 if (allTiles[tileX, tileY] <= density)
@@ -59,28 +56,14 @@ public class Generation : MonoBehaviour
         }
     }
 
-    private void DisplayMap()
-    {
-        for (int tileX = 0; tileX < size; tileX++)
-        {
-            for (int tileY = 0; tileY < size; tileY++)
-            {
-                if (allTiles[tileX, tileY] == 0)
-                {
-                    tilemap.SetTile(new Vector3Int(tileX, tileY, 0), mainTile);
-                }
-            }
-        }
-    }
-
     private void Excavate()
     {
-        updatedTiles = new int[size, size];
-        for (int tileX = 1; tileX < size - 1; tileX++)
+        updatedTiles = new int[MapSize, MapSize];
+        for (int tileX = 1; tileX < MapSize - 1; tileX++)
         {
-            for (int tileY = 1; tileY < size - 1; tileY++)
+            for (int tileY = 1; tileY < MapSize - 1; tileY++)
             {
-                neighbourCount =    allTiles[tileX + 1, tileY + 0] + //RIGHT
+                neighbourCount = allTiles[tileX + 1, tileY + 0] + //RIGHT
                                     allTiles[tileX + 1, tileY + 1] + //BOTTOM RIGHT
                                     allTiles[tileX + 0, tileY + 1] + //BOTTOM
                                     allTiles[tileX - 1, tileY + 1] + //BOTTOM LEFT
@@ -102,5 +85,19 @@ public class Generation : MonoBehaviour
         }
 
         allTiles = updatedTiles;
+    }
+
+    private void DisplayMap()
+    {
+        for (int tileX = 0; tileX < MapSize; tileX++)
+        {
+            for (int tileY = 0; tileY < MapSize; tileY++)
+            {
+                if (allTiles[tileX, tileY] == 0)
+                {
+                    tilemap.SetTile(new Vector3Int(tileX, tileY, 0), mainTile);
+                }
+            }
+        }
     }
 }

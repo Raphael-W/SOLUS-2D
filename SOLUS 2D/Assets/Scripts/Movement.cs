@@ -4,21 +4,23 @@ using Unity.Netcode;
 public class Movement : NetworkBehaviour
 {
 
-    public Rigidbody2D rb;
+    public Rigidbody2D RigidBody;
+
     private MvInputKey Key;
 
     private Vector2 oldPosition;
     public float rotationMomentum = 0.8f;
-    private float speed;
+    private float prevRotation = 0f;
+    public float mainThrust = 600;
+    public float rotationThrust = 150f;
+    private float Speed;
 
     private GameObject MainUniverse;
     private GameObject ServerManager;
-
-    public float mainThrust = 600;
-    public float rotationThrust = 150f;
-    private float prevRotation = 0f;
-
     private GameObject ConnectionUI;
+
+    private ServerManager ServerScript;
+    private Generation generation;
 
 
     enum MvInputKey {
@@ -32,7 +34,7 @@ public class Movement : NetworkBehaviour
         if (IsOwner)
         {
             MainUniverse = GameObject.FindGameObjectWithTag("MainUniverseTag");
-            Generation generation = MainUniverse.GetComponent<Generation>();
+            generation = MainUniverse.GetComponent<Generation>();
             generation.BeginGeneration(current);
         }
 
@@ -45,13 +47,13 @@ public class Movement : NetworkBehaviour
         {
             base.OnNetworkSpawn();
 
-            rb = GetComponent<Rigidbody2D>();
+            RigidBody = GetComponent<Rigidbody2D>();
 
             ConnectionUI = GameObject.FindGameObjectWithTag("ConnectionUI");
             ConnectionUI.SetActive(false);
 
             ServerManager = GameObject.FindGameObjectWithTag("Server");
-            ServerManager ServerScript = ServerManager.GetComponent<ServerManager>();
+            ServerScript = ServerManager.GetComponent<ServerManager>();
 
             ServerScript.seed.OnValueChanged += MapReset;
             MapReset(0, ServerScript.seed.Value); //0 is the "Previous value". It can be anything because although it isnt used, it is requited for the OnValueChanged.
@@ -73,9 +75,6 @@ public class Movement : NetworkBehaviour
             Key = Key | MvInputKey.Key_Right;
 
         }
-
-
-
     }
 
 
@@ -86,9 +85,8 @@ public class Movement : NetworkBehaviour
         if (!IsOwner) return;
 
         ProcessRotation();
-        //rb.AddRelativeForce(Vector3.up * mainThrust * Time.deltaTime);
 
-        speed = Vector2.Distance(oldPosition, transform.position) * 100f;
+        Speed = Vector2.Distance(oldPosition, transform.position) * 100f;
         oldPosition = transform.position;
 
 
@@ -99,8 +97,6 @@ public class Movement : NetworkBehaviour
 
     void ProcessRotation()
     {
-        //textLabel.text = "";
-
         if ((Key & MvInputKey.Key_Left) != 0) {
             prevRotation = rotationThrust;
             RotatePlayer(rotationThrust);
@@ -113,11 +109,11 @@ public class Movement : NetworkBehaviour
         if (Key != MvInputKey.Key_Neutral) {
 
             if ((Key & MvInputKey.Key_Left) != 0 && (Key & MvInputKey.Key_Right) != 0) {
-                rb.AddRelativeForce(Vector2.up * mainThrust * Time.deltaTime);
+                RigidBody.AddRelativeForce(Vector2.up * mainThrust * Time.deltaTime);
             }
 
             else {
-                rb.AddRelativeForce(Vector2.up * (mainThrust / 2) * Time.deltaTime);
+                RigidBody.AddRelativeForce(Vector2.up * (mainThrust / 2) * Time.deltaTime);
             }
         }
         else {
@@ -134,13 +130,11 @@ public class Movement : NetworkBehaviour
 
     private void RotatePlayer(float rotationThisFrame)
     {
-        rb.freezeRotation = true; //freezing rotation so we can manually rotate
-        //transform.Rotate(Vector3.forward * Time.deltaTime * rotationThisFrame);
-        //transform.eulerAngles = Vector3.Lerp(Vector3.zero, rotationThisFrame, Time.deltaTime * 5);
+        RigidBody.freezeRotation = true; //freezing rotation so we can manually rotate
 
         Quaternion desiredRotation = transform.rotation * Quaternion.Euler(Vector3.forward * rotationThisFrame * Time.deltaTime);
         transform.rotation = Quaternion.Lerp(transform.rotation, desiredRotation, Time.deltaTime * 100f);
 
-        rb.freezeRotation = false; //unfreezing rotation so the physics system can take over
+        RigidBody.freezeRotation = false; //unfreezing rotation so the physics system can take over
     }
 }

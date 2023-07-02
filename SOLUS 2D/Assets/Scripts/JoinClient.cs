@@ -1,17 +1,16 @@
 using UnityEngine;
 using Unity.Netcode;
 using Unity.Netcode.Transports.UTP;
-//using MLAPI.Transports.UNET;
 using TMPro;
 
 public class JoinClient : MonoBehaviour
 {
-    public TMP_InputField IPField;
+    public TMP_InputField IPInputField;
     private string InputtedIP;
 
     public void JoinIP()
     {
-        InputtedIP = IPField.text.ToString();
+        InputtedIP = IPInputField.text.ToString();
         NetworkManager.Singleton.GetComponent<UnityTransport>().SetConnectionData(InputtedIP, (ushort)6666);
 
         NetworkManager.Singleton.StartClient();

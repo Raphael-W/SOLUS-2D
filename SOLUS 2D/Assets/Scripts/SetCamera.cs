@@ -1,24 +1,16 @@
-using UnityEngine;
 using Cinemachine;
 using Unity.Netcode;
 
 public class SetCamera : NetworkBehaviour
 {
-    private CinemachineVirtualCamera vcam;
-
-    private void Initialize()
-    {
-        vcam = FindObjectOfType<CinemachineVirtualCamera>();
-
-        vcam.Follow = gameObject.transform;
-    }
+    private CinemachineVirtualCamera VirtualCamera;
 
     public override void OnNetworkSpawn()
     {
-
         if (!IsOwner) return;
         base.OnNetworkSpawn();
-        
-        Initialize();
+
+        VirtualCamera = FindObjectOfType<CinemachineVirtualCamera>();
+        VirtualCamera.Follow = gameObject.transform;
     }
 }

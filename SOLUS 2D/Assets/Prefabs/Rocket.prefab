@@ -181,10 +181,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f732c11dd601cb419dfa1d8ff4214be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rb: {fileID: 7007997578932411907}
+  RigidBody: {fileID: 7007997578932411907}
   rotationMomentum: 0.8
   mainThrust: 500
   rotationThrust: 200
+  fuel: 5000000
+  refuelSpeed: 1000
+  landPrecision: 20
+  fuelRemaining: 5000000
 --- !u!114 &9197348364159001695
 MonoBehaviour:
   m_ObjectHideFlags: 0

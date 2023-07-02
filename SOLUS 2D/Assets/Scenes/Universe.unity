@@ -2191,7 +2191,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fdffb0622d8cce84cb2d62472a843520, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  IPField: {fileID: 1558827320}
+  IPInputField: {fileID: 1558827320}
 --- !u!1 &1894191298
 GameObject:
   m_ObjectHideFlags: 0
@@ -2655,6 +2655,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0fd08a7e0f7ba0645b17649704418cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  seed:
+    m_InternalValue: 0
 --- !u!1 &4438433986069650957
 GameObject:
   m_ObjectHideFlags: 0
@@ -2875,9 +2877,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tilemap: {fileID: 4686574647862058100}
   mainTile: {fileID: 11400000, guid: fb4d4c4ed98c5344b8d9ddf4818742ed, type: 2}
-  size: 500
   density: 65
   iterations: 10
+  MapSize: 500
 --- !u!1 &8551988110157376535
 GameObject:
   m_ObjectHideFlags: 0

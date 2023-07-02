@@ -1,5 +1,9 @@
 using UnityEngine;
 using Unity.Netcode;
+using System;
+using UnityEngine.Tilemaps;
+using Unity.VisualScripting;
+using Unity.Burst.CompilerServices;
 
 public class Movement : NetworkBehaviour
 {
@@ -13,11 +17,21 @@ public class Movement : NetworkBehaviour
     private float prevRotation = 0f;
     public float mainThrust = 600;
     public float rotationThrust = 150f;
-    private float Speed;
+    private float speed;
+
+    private float currentRotation;
+    private Vector3Int posBeneath;
+
+    public float fuel = 5000000;
+    public float refuelSpeed = 1f;
+    public float landPrecision = 15f;
+    public float fuelRemaining;
 
     private GameObject MainUniverse;
     private GameObject ServerManager;
     private GameObject ConnectionUI;
+
+    private Tilemap tilemap;
 
     private ServerManager ServerScript;
     private Generation generation;
@@ -33,8 +47,7 @@ public class Movement : NetworkBehaviour
     {
         if (IsOwner)
         {
-            MainUniverse = GameObject.FindGameObjectWithTag("MainUniverseTag");
-            generation = MainUniverse.GetComponent<Generation>();
+            
             generation.BeginGeneration(current);
         }
 
@@ -50,30 +63,68 @@ public class Movement : NetworkBehaviour
             RigidBody = GetComponent<Rigidbody2D>();
 
             ConnectionUI = GameObject.FindGameObjectWithTag("ConnectionUI");
-            ConnectionUI.SetActive(false);
-
             ServerManager = GameObject.FindGameObjectWithTag("Server");
             ServerScript = ServerManager.GetComponent<ServerManager>();
+            MainUniverse = GameObject.FindGameObjectWithTag("MainUniverseTag");
+            generation = MainUniverse.GetComponent<Generation>();
+            tilemap = MainUniverse.GetComponent<Tilemap>();
+
+            ConnectionUI.SetActive(false);
 
             ServerScript.seed.OnValueChanged += MapReset;
             MapReset(0, ServerScript.seed.Value); //0 is the "Previous value". It can be anything because although it isnt used, it is requited for the OnValueChanged.
+
+            fuelRemaining = fuel;
         }
     }
 
     void Update()
     {
+        Debug.Log("Fuel: " + Math.Round((fuelRemaining/fuel) * 100, 0) + "%");
+
         if (!IsOwner) return;
 
         Key = MvInputKey.Key_Neutral;
 
         if (Input.GetKey(KeyCode.A)) {
-            Key = Key | MvInputKey.Key_Left;
+            if (fuelRemaining >= 0)
+            {
+                Key |= MvInputKey.Key_Left;
+            }
 
+            else
+            {
+                fuelRemaining = 0;
+            }
         }
     
         if (Input.GetKey(KeyCode.D)) {
-            Key = Key | MvInputKey.Key_Right;
+            if (fuelRemaining >= 0)
+            {
+                Key |= MvInputKey.Key_Right;
+            }
 
+            else
+            {
+                fuelRemaining = 0;
+            }
+        }
+
+        posBeneath = Vector3Int.FloorToInt(transform.position - new Vector3Int(0, 1, 0));
+        currentRotation = transform.rotation.eulerAngles.z;
+
+        if (tilemap.HasTile(posBeneath) && (360-landPrecision <= currentRotation && currentRotation >= landPrecision))
+        {
+            if (fuelRemaining <= fuel)
+            {
+                fuelRemaining += refuelSpeed;
+            }
+
+            else
+            {
+                fuelRemaining = fuel;
+            }
+            
         }
     }
 
@@ -86,11 +137,8 @@ public class Movement : NetworkBehaviour
 
         ProcessRotation();
 
-        Speed = Vector2.Distance(oldPosition, transform.position) * 100f;
+        speed = Vector2.Distance(oldPosition, transform.position) * 100f;
         oldPosition = transform.position;
-
-
-
     }
 
 
@@ -100,16 +148,22 @@ public class Movement : NetworkBehaviour
         if ((Key & MvInputKey.Key_Left) != 0) {
             prevRotation = rotationThrust;
             RotatePlayer(rotationThrust);
+            fuelRemaining -= rotationThrust;
+            
         }
         if ((Key & MvInputKey.Key_Right) != 0) {
             prevRotation = -rotationThrust;
             RotatePlayer(-rotationThrust);
+            fuelRemaining -= rotationThrust;
+            
 
         }
         if (Key != MvInputKey.Key_Neutral) {
 
             if ((Key & MvInputKey.Key_Left) != 0 && (Key & MvInputKey.Key_Right) != 0) {
                 RigidBody.AddRelativeForce(Vector2.up * mainThrust * Time.deltaTime);
+                fuelRemaining -= mainThrust;
+                
             }
 
             else {

@@ -1,7 +1,6 @@
 using UnityEngine;
 using Unity.Netcode;
 
-
 public class Movement : NetworkBehaviour
 {
 
@@ -13,6 +12,7 @@ public class Movement : NetworkBehaviour
     private float speed;
 
     private GameObject MainUniverse;
+    private GameObject ServerManager;
 
     public float mainThrust = 600;
     public float rotationThrust = 150f;
@@ -27,16 +27,13 @@ public class Movement : NetworkBehaviour
         Key_Right = 2,
     };
 
-    [ClientRpc]
-    public void MapResetClientRpc(bool ServerChange, int CurrentSeed)
+    public void MapReset(int previous, int current)
     {
-        Debug.Log("Recieved");
-        if (IsOwner || ServerChange)
+        if (IsOwner)
         {
-            Debug.Log("Server Change");
             MainUniverse = GameObject.FindGameObjectWithTag("MainUniverseTag");
             Generation generation = MainUniverse.GetComponent<Generation>();
-            generation.BeginGeneration(CurrentSeed);
+            generation.BeginGeneration(current);
         }
 
         transform.position = new Vector3(250, 200, 0);
@@ -52,10 +49,13 @@ public class Movement : NetworkBehaviour
 
             ConnectionUI = GameObject.FindGameObjectWithTag("ConnectionUI");
             ConnectionUI.SetActive(false);
+
+            ServerManager = GameObject.FindGameObjectWithTag("Server");
+            ServerManager ServerScript = ServerManager.GetComponent<ServerManager>();
+
+            ServerScript.seed.OnValueChanged += MapReset;
+            MapReset(0, ServerScript.seed.Value); //0 is the "Previous value". It can be anything because although it isnt used, it is requited for the OnValueChanged.
         }
-
-        MapResetClientRpc(false, ServerManager.GetSeed());
-
     }
 
     void Update()

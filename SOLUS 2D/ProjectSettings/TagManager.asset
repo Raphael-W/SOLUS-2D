@@ -8,6 +8,8 @@ TagManager:
   - ConnectionUI
   - ServerUI
   - Server
+  - GameUI
+  - FuelTank
   layers:
   - Default
   - TransparentFX

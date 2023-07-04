@@ -80,14 +80,14 @@ public class Movement : NetworkBehaviour
 
     void Update()
     {
-        Debug.Log("Fuel: " + Math.Round((fuelRemaining/fuel) * 100, 0) + "%");
-
         if (!IsOwner) return;
+
+        //Debug.Log("Fuel: " + Math.Round((fuelRemaining / fuel) * 100, 0) + "%");
 
         Key = MvInputKey.Key_Neutral;
 
         if (Input.GetKey(KeyCode.A)) {
-            if (fuelRemaining >= 0)
+            if (fuelRemaining > 0)
             {
                 Key |= MvInputKey.Key_Left;
             }
@@ -99,7 +99,7 @@ public class Movement : NetworkBehaviour
         }
     
         if (Input.GetKey(KeyCode.D)) {
-            if (fuelRemaining >= 0)
+            if (fuelRemaining > 0)
             {
                 Key |= MvInputKey.Key_Right;
             }

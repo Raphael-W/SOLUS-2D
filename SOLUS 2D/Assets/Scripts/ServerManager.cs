@@ -1,47 +1,49 @@
 using UnityEngine;
 using Unity.Netcode;
-using Cinemachine;
+using UnityEngine.SceneManagement;
+using TMPro;
+using Unity.Netcode.Transports.UTP;
 
 public class ServerManager : NetworkBehaviour
 {
     public NetworkVariable<int> seed = new NetworkVariable<int>();
-    private CinemachineVirtualCamera VirtualCamera;
-
     private GameObject MainUniverse;
-    private GameObject ConnectionUI;
-    private GameObject ServerUI;
-
-    private int MapSize;
     private Generation generation;
+
+    public TMP_InputField IPField;
+    private string Address;
 
     private void Start()
     {
-        ServerUI = GameObject.FindGameObjectWithTag("ServerUI");
-        ConnectionUI = GameObject.FindGameObjectWithTag("ConnectionUI");
         MainUniverse = GameObject.FindGameObjectWithTag("MainUniverseTag");
         generation = MainUniverse.GetComponent<Generation>();
-        VirtualCamera = FindObjectOfType<CinemachineVirtualCamera>();
-
-        ServerUI.SetActive(false);
-        MapSize = generation.MapSize;
     }
 
-    public void StartServer()
+    public void StartGameButton()
     {
+        SceneManager.LoadScene("StartGame", LoadSceneMode.Additive);
+    }
 
-        ConnectionUI.SetActive(false);
-        ServerUI.SetActive(true);
+    public void JoinGameButton()
+    {
+        SceneManager.LoadScene("JoinGame", LoadSceneMode.Additive);
+    }
 
-        NetworkManager.Singleton.StartServer();
+    public void StartHost()
+    {
+        Address = IPField.text.ToString();
+        NetworkManager.Singleton.GetComponent<UnityTransport>().SetConnectionData(Address, (ushort)6666);
+        NetworkManager.Singleton.StartHost();
         NewSeed();
-
-        VirtualCamera.transform.position = new Vector3(0, (MapSize / 2) - 0.12f * (MapSize / 2), -50);
-        VirtualCamera.m_Lens.OrthographicSize = (MapSize / 2) * 1.2f;
     }
 
     public void NewSeed()
     {
-        seed.Value = Random.Range(1000000, 9999999);
+        if (IsServer)
+        {
+            seed.Value = Random.Range(1000000, 9999999);
+        }
+        
         generation.BeginGeneration(seed.Value);
     }
 

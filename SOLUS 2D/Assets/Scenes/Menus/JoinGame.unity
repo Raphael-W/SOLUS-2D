@@ -475,6 +475,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   IPField: {fileID: 2064279632}
+  StartButton: {fileID: 0}
+  JoinButton: {fileID: 326618417}
 --- !u!4 &644097870
 Transform:
   m_ObjectHideFlags: 0

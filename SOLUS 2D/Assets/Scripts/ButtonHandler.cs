@@ -1,6 +1,7 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class ButtonHandler : MonoBehaviour
 {
@@ -9,6 +10,9 @@ public class ButtonHandler : MonoBehaviour
 
     public TMP_InputField IPField;
     private string Address;
+
+    public Button StartButton;
+    public Button JoinButton;
 
     public void Start()
     {
@@ -30,11 +34,15 @@ public class ButtonHandler : MonoBehaviour
     {
         Address = IPField.text.ToString();
         ServerManagerScript.StartHost(Address);
+
+        StartButton.interactable = false;
     }
 
     public void StartClient()
     {
         Address = IPField.text.ToString();
         ServerManagerScript.StartClient(Address);
+
+        JoinButton.interactable = false;
     }
 }

@@ -4,7 +4,7 @@ using Unity.Netcode.Transports.UTP;
 
 public class ServerManager : NetworkBehaviour
 {
-    private static NetworkVariable<int> seed = new NetworkVariable<int>();
+    private readonly NetworkVariable<int> seed = new();
 
     private GameObject MapGenerator;
     private Generation generation;
@@ -26,13 +26,6 @@ public class ServerManager : NetworkBehaviour
         ServerReady = false;
 
         NetworkManager.Singleton.OnClientConnectedCallback += ClientConnected;
-        seed.OnValueChanged += ValueChanged;
-    }
-
-    public void ValueChanged(int previous, int current)
-    {
-        Debug.Log("Value Changed");
-        seed.OnValueChanged -= ValueChanged;
     }
 
     public void ClientConnected(ulong clientId)
@@ -58,12 +51,8 @@ public class ServerManager : NetworkBehaviour
     {
         if (IsServer)
         {
-            Debug.Log("Seed value before: " + seed.Value);
             seed.Value = Random.Range(1000000, 9999999);
-            Debug.Log("Seed value after: " + seed.Value);
         }
-
-        Debug.Log("Seed Retrieved");
         generation.BeginGeneration(seed.Value);
     }
 

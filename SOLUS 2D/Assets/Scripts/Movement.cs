@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using Unity.Netcode;
 using UnityEngine.Tilemaps;
@@ -40,7 +41,6 @@ public class Movement : NetworkBehaviour
     {
         if (IsOwner)
         {
-            Debug.Log("Spawned In");
             RigidBody = GetComponent<Rigidbody2D>();
 
             MainUniverse = GameObject.FindGameObjectWithTag("MainUniverseTag");
@@ -56,7 +56,7 @@ public class Movement : NetworkBehaviour
     {
         if (!IsOwner) return;
 
-        //Debug.Log("Fuel: " + Math.Round((fuelRemaining / fuel) * 100, 0) + "%");
+        Debug.Log("Fuel: " + Math.Round((fuelRemaining / fuel) * 100, 0) + "%");
 
         Key = MvInputKey.Key_Neutral;
 

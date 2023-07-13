@@ -10,6 +10,7 @@ TagManager:
   - GameUI
   - StartGame
   - JoinGame
+  - FuelPercentage
   layers:
   - Default
   - TransparentFX
@@ -17,7 +18,7 @@ TagManager:
   - Players
   - Water
   - UI
-  - 
+  - TileMap
   - 
   - 
   - 

@@ -56,6 +56,11 @@ public class ServerManager : NetworkBehaviour
         generation.BeginGeneration(seed.Value);
     }
 
+    public void Disconnect()
+    {
+        NetworkManager.Singleton.Shutdown();
+    }
+
     public void Update()
     {
         if (ClientReady && ServerReady)

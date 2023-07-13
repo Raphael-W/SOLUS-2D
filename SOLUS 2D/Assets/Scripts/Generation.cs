@@ -106,4 +106,9 @@ public class Generation : MonoBehaviour
             }
         }
     }
+
+    public void ClearTiles()
+    {
+        tilemap.ClearAllTiles();
+    }
 }

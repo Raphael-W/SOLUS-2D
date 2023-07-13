@@ -2,6 +2,7 @@ using System;
 using UnityEngine;
 using Unity.Netcode;
 using UnityEngine.Tilemaps;
+using TMPro;
 
 public class Movement : NetworkBehaviour
 {
@@ -30,6 +31,16 @@ public class Movement : NetworkBehaviour
     private GameObject MainUniverse;
     private Tilemap tilemap;
 
+    private GameObject FuelPercentage;
+    private TMP_Text FuelPercentageText;
+
+    private LayerMask tileLayer;
+    private Vector2 rayOrigin;
+    private Vector2 rayDirection;
+    private Vector2 landOffset;
+    private RaycastHit2D landCheckL;
+    private RaycastHit2D landCheckR;
+
 
     enum MvInputKey {
         Key_Neutral = 0,
@@ -46,6 +57,11 @@ public class Movement : NetworkBehaviour
             MainUniverse = GameObject.FindGameObjectWithTag("MainUniverseTag");
             tilemap = MainUniverse.GetComponent<Tilemap>();
 
+            FuelPercentage = GameObject.FindGameObjectWithTag("FuelPercentage");
+            FuelPercentageText = FuelPercentage.GetComponent<TMP_Text>();
+
+            tileLayer = LayerMask.GetMask("TileMap");
+
             fuelRemaining = fuel;
         }
 
@@ -55,8 +71,6 @@ public class Movement : NetworkBehaviour
     void Update()
     {
         if (!IsOwner) return;
-
-        Debug.Log("Fuel: " + Math.Round((fuelRemaining / fuel) * 100, 0) + "%");
 
         Key = MvInputKey.Key_Neutral;
 
@@ -84,10 +98,17 @@ public class Movement : NetworkBehaviour
             }
         }
 
-        posBeneath = Vector3Int.FloorToInt(transform.position - new Vector3Int(0, 1, 0));
+        FuelPercentageText.text = (Math.Round((fuelRemaining / fuel) * 100, 0) + "%");
         currentRotation = transform.rotation.eulerAngles.z;
 
-        if (tilemap.HasTile(posBeneath) && (360-landPrecision <= currentRotation && currentRotation >= landPrecision))
+        rayOrigin = transform.position;
+        rayDirection = Vector2.down;
+        landOffset = new Vector2(0.2f, 0);
+
+        landCheckL = Physics2D.Raycast(rayOrigin - landOffset, rayDirection, 1.5f, tileLayer);
+        landCheckR = Physics2D.Raycast(rayOrigin + landOffset, rayDirection, 1.5f, tileLayer);
+
+        if ((landCheckL.collider != null || landCheckR.collider != null) && (360-landPrecision <= currentRotation && currentRotation >= landPrecision))
         {
             if (fuelRemaining <= fuel)
             {

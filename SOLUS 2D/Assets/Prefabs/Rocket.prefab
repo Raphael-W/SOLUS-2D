@@ -17,7 +17,6 @@ GameObject:
   - component: {fileID: 6138993790172365583}
   - component: {fileID: 620650056278658917}
   - component: {fileID: 6737663578081816326}
-  - component: {fileID: -8893716517122256479}
   m_Layer: 3
   m_Name: Rocket
   m_TagString: Player
@@ -264,29 +263,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e0b20d2c80664314ca2d28248351b8aa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &-8893716517122256479
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1560197103564948255}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5f6fe91d08ad21e49a0b2acf84bfdbc9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  fuelLevels:
-  - {fileID: 21300000, guid: 2b90e45b6a6e5ce4aa54475597f8ea09, type: 3}
-  - {fileID: 21300000, guid: b1c4411db90fe4742ba0e07f73b784cb, type: 3}
-  - {fileID: 21300000, guid: ce6e87b8122b3b14b8371f306e1ae25c, type: 3}
-  - {fileID: 21300000, guid: e5b81b51447e30544aa883d87ddc7e91, type: 3}
-  - {fileID: 21300000, guid: 1665950866152d645bc278008ec583fd, type: 3}
-  - {fileID: 21300000, guid: 922fe8ec474a2e6438bbd2ca01488aa2, type: 3}
-  - {fileID: 21300000, guid: 75139784c4d18ed499c109b7510caac7, type: 3}
-  - {fileID: 21300000, guid: 9bed10ddcd7bf544b8ab6763ff6054fb, type: 3}
-  - {fileID: 21300000, guid: 0eb8582a29e04e1448d616bc72dc42a4, type: 3}
-  - {fileID: 21300000, guid: c48c1b47ff40e12488ac6abeec6515bb, type: 3}
-  - {fileID: 21300000, guid: dc8a561cee378d24b8fc26285df3151b, type: 3}
-  - {fileID: 21300000, guid: 72a5f6a1139fd8343a77a52b25a12324, type: 3}
-  - {fileID: 21300000, guid: 5df268ed3b1056e49b9c65e0ef617b22, type: 3}

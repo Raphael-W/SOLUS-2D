@@ -1,54 +1,79 @@
 using UnityEngine;
 using Unity.Netcode;
-using UnityEngine.SceneManagement;
-using TMPro;
 using Unity.Netcode.Transports.UTP;
 
 public class ServerManager : NetworkBehaviour
 {
-    public NetworkVariable<int> seed = new NetworkVariable<int>();
-    private GameObject MainUniverse;
+    private static NetworkVariable<int> seed = new NetworkVariable<int>();
+
+    private GameObject MapGenerator;
     private Generation generation;
 
-    public TMP_InputField IPField;
-    private string Address;
+    private bool ClientReady;
+    private bool ServerReady;
 
-    private void Start()
+    public void Awake()
     {
-        MainUniverse = GameObject.FindGameObjectWithTag("MainUniverseTag");
-        generation = MainUniverse.GetComponent<Generation>();
+        DontDestroyOnLoad(gameObject);
     }
 
-    public void StartGameButton()
+    public void Start()
     {
-        SceneManager.LoadScene("StartGame", LoadSceneMode.Additive);
+        MapGenerator = GameObject.FindGameObjectWithTag("MainUniverseTag");
+        generation = MapGenerator.GetComponent<Generation>();
+
+        ClientReady = false;
+        ServerReady = false;
+
+        NetworkManager.Singleton.OnClientConnectedCallback += ClientConnected;
+        seed.OnValueChanged += ValueChanged;
     }
 
-    public void JoinGameButton()
+    public void ValueChanged(int previous, int current)
     {
-        SceneManager.LoadScene("JoinGame", LoadSceneMode.Additive);
+        Debug.Log("Value Changed");
+        seed.OnValueChanged -= ValueChanged;
     }
 
-    public void StartHost()
+    public void ClientConnected(ulong clientId)
     {
-        Address = IPField.text.ToString();
+        ClientReady = true;
+    }
+
+    public void StartHost(string Address)
+    {
         NetworkManager.Singleton.GetComponent<UnityTransport>().SetConnectionData(Address, (ushort)6666);
         NetworkManager.Singleton.StartHost();
-        NewSeed();
+        ServerReady = true;
     }
 
-    public void NewSeed()
+    public void StartClient(string Address)
+    {
+        NetworkManager.Singleton.GetComponent<UnityTransport>().SetConnectionData(Address, (ushort)6666);
+        NetworkManager.Singleton.StartClient();
+        ServerReady = true;
+    }
+
+    public void Seed()
     {
         if (IsServer)
         {
+            Debug.Log("Seed value before: " + seed.Value);
             seed.Value = Random.Range(1000000, 9999999);
+            Debug.Log("Seed value after: " + seed.Value);
         }
-        
+
+        Debug.Log("Seed Retrieved");
         generation.BeginGeneration(seed.Value);
     }
 
-    public void StopServer()
+    public void Update()
     {
-        NetworkManager.Singleton.Shutdown();
+        if (ClientReady && ServerReady)
+        {
+            Seed();
+            ClientReady = false;
+            ServerReady = false;
+        }
     }
 }

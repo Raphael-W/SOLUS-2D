@@ -5,11 +5,11 @@ TagManager:
   serializedVersion: 2
   tags:
   - MainUniverseTag
-  - ConnectionUI
-  - ServerUI
-  - Server
-  - GameUI
   - FuelTank
+  - ServerManager
+  - GameUI
+  - StartGame
+  - JoinGame
   layers:
   - Default
   - TransparentFX

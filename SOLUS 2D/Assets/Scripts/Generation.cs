@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.Tilemaps;
 
 public class Generation : MonoBehaviour
@@ -30,6 +31,11 @@ public class Generation : MonoBehaviour
 
         DisplayMap();
 
+        SceneManager.UnloadSceneAsync("MainMenu");
+
+        var lastSceneIndex = SceneManager.sceneCount - 1;
+        var lastLoadedScene = SceneManager.GetSceneAt(lastSceneIndex);
+        SceneManager.UnloadSceneAsync(lastLoadedScene);
     }
 
     private void InitialiseTiles()

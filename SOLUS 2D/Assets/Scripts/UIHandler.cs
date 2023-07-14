@@ -1,7 +1,5 @@
-using Newtonsoft.Json.Bson;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Rendering;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -26,7 +24,7 @@ public class UIHandler : MonoBehaviour
 
     public Canvas[] AllUI;
     private bool PauseUIChange;
-    private TMP_Text SliderText;
+    public TMP_Text SliderText;
 
     public void Awake()
     {
@@ -34,6 +32,11 @@ public class UIHandler : MonoBehaviour
         {
             SettingsUI.enabled = false;
             GameUI.enabled = false;
+        }
+
+        else if (SceneManager.sceneCount == 2)
+        {
+            SettingsUI.enabled = false;
         }
     }
 
@@ -103,7 +106,7 @@ public class UIHandler : MonoBehaviour
 
     public void OpenSettings()
     {
-        UISlider.value = PlayerPrefs.GetFloat("UISize");
+        UISlider.value = PlayerPrefs.GetFloat("UISize", 10);
 
         SettingsUI.enabled = true;
     }
@@ -129,7 +132,7 @@ public class UIHandler : MonoBehaviour
     public void PauseUIChanges()
     {
         PauseUIChange = true;
-        SliderText = GameObject.Find("Value").GetComponent<TMP_Text>();
+        //SliderText = GameObject.Find("Value").GetComponent<TMP_Text>();
 
         SliderText.enabled = true;
     }
@@ -137,16 +140,21 @@ public class UIHandler : MonoBehaviour
     public void ResumeUIChanges()
     {
         PauseUIChange = false;
-        SliderText = GameObject.Find("Value").GetComponent<TMP_Text>();
+        //SliderText = GameObject.Find("Value").GetComponent<TMP_Text>();
 
         SliderText.enabled = false;
+    }
+
+    public void Quit()
+    {
+        Application.Quit();
     }
 
     public void Update()
     {
         if (!PauseUIChange)
         {
-            SetUISize(PlayerPrefs.GetFloat("UISize"));
+            SetUISize(PlayerPrefs.GetFloat("UISize", 10));
         }
 
         else

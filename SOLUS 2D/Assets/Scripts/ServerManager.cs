@@ -12,8 +12,19 @@ public class ServerManager : NetworkBehaviour
     private bool ClientReady;
     private bool ServerReady;
 
+    private GameObject[] ServerManagers;
+
     public void Awake()
     {
+        ServerManagers = GameObject.FindGameObjectsWithTag("ServerManager");
+        foreach (GameObject ServerManagerInstance in  ServerManagers)
+        {
+            if(ServerManagerInstance != this.gameObject)
+            {
+                Destroy(ServerManagerInstance);
+            }    
+        }
+
         DontDestroyOnLoad(gameObject);
     }
 

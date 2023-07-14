@@ -32,12 +32,17 @@ public class Movement : NetworkBehaviour
     private GameObject UIHandler;
     private UIHandler UIHandlerScript;
 
+    private GameObject ServerManager;
+    private ServerManager ServerManagerScript;
+
     private LayerMask tileLayer;
     private Vector2 rayOrigin;
     private Vector2 rayDirection;
     private Vector2 landOffset;
     private RaycastHit2D landCheckL;
     private RaycastHit2D landCheckR;
+
+    public Color[] PlayerColours;
 
 
     enum MvInputKey {
@@ -58,13 +63,26 @@ public class Movement : NetworkBehaviour
             UIHandler = GameObject.FindGameObjectWithTag("UIHandler");
             UIHandlerScript = UIHandler.GetComponent<UIHandler>();
 
+            ServerManager = GameObject.FindGameObjectWithTag("ServerManager");
+            ServerManagerScript = ServerManager.GetComponent<ServerManager>();
+
             tileLayer = LayerMask.GetMask("TileMap");
             UIHandlerScript.GameUI.enabled = true;
 
             fuelRemaining = fuel;
         }
 
+        if (!IsOwner)
+        {
+            GetComponent<SpriteRenderer>().color = PlayerColours[OwnerClientId];
+        }
+
         transform.position = new Vector3(250, 200, 0);
+    }
+
+    public void SetColour()
+    {
+
     }
 
     void Update()

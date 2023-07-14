@@ -1,7 +1,6 @@
 using System;
 using UnityEngine;
 using Unity.Netcode;
-using UnityEngine.Tilemaps;
 using TMPro;
 
 public class Movement : NetworkBehaviour
@@ -19,20 +18,19 @@ public class Movement : NetworkBehaviour
     public float rotationThrust = 150f;
 
     private float currentRotation;
-    private Vector3Int posBeneath;
 
     [Header("Fuel Settings")]
 
     public float fuel = 5000000;
-    public float refuelSpeed = 1f;
+    public float refuelSpeed;
     public float landPrecision = 15f;
     public float fuelRemaining;
 
-    private GameObject MainUniverse;
-    private Tilemap tilemap;
-
     private GameObject FuelPercentage;
     private TMP_Text FuelPercentageText;
+
+    private GameObject UIHandler;
+    private UIHandler UIHandlerScript;
 
     private LayerMask tileLayer;
     private Vector2 rayOrigin;
@@ -54,13 +52,14 @@ public class Movement : NetworkBehaviour
         {
             RigidBody = GetComponent<Rigidbody2D>();
 
-            MainUniverse = GameObject.FindGameObjectWithTag("MainUniverseTag");
-            tilemap = MainUniverse.GetComponent<Tilemap>();
-
             FuelPercentage = GameObject.FindGameObjectWithTag("FuelPercentage");
             FuelPercentageText = FuelPercentage.GetComponent<TMP_Text>();
 
+            UIHandler = GameObject.FindGameObjectWithTag("UIHandler");
+            UIHandlerScript = UIHandler.GetComponent<UIHandler>();
+
             tileLayer = LayerMask.GetMask("TileMap");
+            UIHandlerScript.GameUI.enabled = true;
 
             fuelRemaining = fuel;
         }
@@ -99,7 +98,7 @@ public class Movement : NetworkBehaviour
         }
 
         FuelPercentageText.text = (Math.Round((fuelRemaining / fuel) * 100, 0) + "%");
-        currentRotation = transform.rotation.eulerAngles.z;
+        currentRotation = transform.rotation.z * 180;
 
         rayOrigin = transform.position;
         rayDirection = Vector2.down;
@@ -108,8 +107,12 @@ public class Movement : NetworkBehaviour
         landCheckL = Physics2D.Raycast(rayOrigin - landOffset, rayDirection, 1.5f, tileLayer);
         landCheckR = Physics2D.Raycast(rayOrigin + landOffset, rayDirection, 1.5f, tileLayer);
 
-        if ((landCheckL.collider != null || landCheckR.collider != null) && (360-landPrecision <= currentRotation && currentRotation >= landPrecision))
+        Debug.DrawRay(rayOrigin - landOffset, rayDirection, Color.green);
+        Debug.DrawRay(rayOrigin + landOffset, rayDirection, Color.green);
+
+        if ((-landPrecision <= currentRotation && currentRotation <= landPrecision) && (landCheckL.collider != null || landCheckR.collider != null))
         {
+
             if (fuelRemaining <= fuel)
             {
                 fuelRemaining += refuelSpeed;
@@ -119,7 +122,6 @@ public class Movement : NetworkBehaviour
             {
                 fuelRemaining = fuel;
             }
-            
         }
     }
 

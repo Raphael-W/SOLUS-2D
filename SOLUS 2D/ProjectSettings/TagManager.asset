@@ -11,6 +11,11 @@ TagManager:
   - StartGame
   - JoinGame
   - FuelPercentage
+  - UIHandler
+  - SeedBox
+  - SettingsUI
+  - UI
+  - UISlider
   layers:
   - Default
   - TransparentFX

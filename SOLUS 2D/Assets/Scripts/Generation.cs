@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Tilemaps;
@@ -16,9 +17,14 @@ public class Generation : MonoBehaviour
 
     private int neighbourCount;
 
+    private GameObject SeedBox;
+    private TMP_Text SeedBoxText;
+
     public void BeginGeneration(int seed)
     {
-        Debug.Log("Seed: " + seed);
+        SeedBox = GameObject.FindGameObjectWithTag("SeedBox");
+        SeedBoxText = SeedBox.GetComponent<TMP_Text>();
+        SeedBoxText.text = ("Seed: " + seed);
 
         Random.InitState(seed);
 

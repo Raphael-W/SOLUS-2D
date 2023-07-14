@@ -589,8 +589,8 @@ GameObject:
   - component: {fileID: 644097870}
   - component: {fileID: 644097869}
   m_Layer: 0
-  m_Name: Button Handler
-  m_TagString: Untagged
+  m_Name: UI Handler
+  m_TagString: UIHandler
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -610,6 +610,11 @@ MonoBehaviour:
   IPField: {fileID: 2064279632}
   StartButton: {fileID: 0}
   JoinButton: {fileID: 326618417}
+  UISlider: {fileID: 0}
+  SettingsUI: {fileID: 0}
+  GameUI: {fileID: 0}
+  AllUI:
+  - {fileID: 1502441842}
 --- !u!4 &644097870
 Transform:
   m_ObjectHideFlags: 0
@@ -1089,7 +1094,7 @@ GameObject:
   - component: {fileID: 1502441840}
   m_Layer: 5
   m_Name: UI
-  m_TagString: Untagged
+  m_TagString: UI
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

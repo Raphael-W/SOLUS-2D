@@ -597,7 +597,7 @@ GameObject:
   - component: {fileID: 802561085}
   m_Layer: 0
   m_Name: Virtual Follow Camera
-  m_TagString: MainCamera
+  m_TagString: Virtual Camera
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -717,7 +717,7 @@ MonoBehaviour:
   NetworkConfig:
     ProtocolVersion: 0
     NetworkTransport: {fileID: 1248369486}
-    PlayerPrefab: {fileID: 1644158909237142481, guid: 36d2b482bd163f24680867af5bbdc9bd, type: 3}
+    PlayerPrefab: {fileID: 5700255698800362321, guid: 36d2b482bd163f24680867af5bbdc9bd, type: 3}
     Prefabs:
       NetworkPrefabsLists:
       - {fileID: 11400000, guid: f9baae1738875904c94f9b24dc708264, type: 2}
@@ -731,7 +731,7 @@ MonoBehaviour:
     EnableSceneManagement: 1
     ForceSamePrefabs: 1
     RecycleNetworkIds: 1
-    NetworkIdRecycleDelay: 120
+    NetworkIdRecycleDelay: 1
     RpcHashSize: 0
     LoadSceneTimeOut: 120
     SpawnTimeout: 1
@@ -1069,12 +1069,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0fd08a7e0f7ba0645b17649704418cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Colours:
-  - {r: 1, g: 0, b: 0, a: 0}
-  - {r: 0.064357795, g: 0.8113208, b: 0, a: 0}
-  - {r: 0, g: 0.36656523, b: 1, a: 0}
-  - {r: 0.9810126, g: 1, b: 0, a: 0}
-  - {r: 1, g: 0.57067186, b: 0, a: 0}
 --- !u!4 &1841452875
 Transform:
   m_ObjectHideFlags: 0
@@ -1592,6 +1586,10 @@ PrefabInstance:
     - target: {fileID: 4616771682333097584, guid: 922719b39bd1ec94299ba90a7eea2568, type: 3}
       propertyPath: m_Name
       value: SettingsUI
+      objectReference: {fileID: 0}
+    - target: {fileID: 4616771682333097584, guid: 922719b39bd1ec94299ba90a7eea2568, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5583078135181641374, guid: 922719b39bd1ec94299ba90a7eea2568, type: 3}
       propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Target

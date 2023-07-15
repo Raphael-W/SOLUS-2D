@@ -16,6 +16,7 @@ TagManager:
   - SettingsUI
   - UI
   - UISlider
+  - Virtual Camera
   layers:
   - Default
   - TransparentFX

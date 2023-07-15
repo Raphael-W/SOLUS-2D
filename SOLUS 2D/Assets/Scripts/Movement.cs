@@ -2,6 +2,8 @@ using System;
 using UnityEngine;
 using Unity.Netcode;
 using TMPro;
+using UnityEngine.UI;
+//using UnityEngine.UIElements;
 
 public class Movement : NetworkBehaviour
 {
@@ -32,9 +34,6 @@ public class Movement : NetworkBehaviour
     private GameObject UIHandler;
     private UIHandler UIHandlerScript;
 
-    private GameObject ServerManager;
-    private ServerManager ServerManagerScript;
-
     private LayerMask tileLayer;
     private Vector2 rayOrigin;
     private Vector2 rayDirection;
@@ -44,6 +43,17 @@ public class Movement : NetworkBehaviour
 
     public Color[] PlayerColours;
 
+    private GameObject GameUI;
+    public GameObject PlayerArrowPrefab;
+    private RectTransform ArrowRectTransform;
+    private GameObject InstantiatedPlayerPrefab;
+    public float BorderSize;
+
+    private Vector3 PointerWorldPosition;
+    private Vector3 CappedTargetScreenPosition;
+    private Vector3 targetPositionScreenPoint;
+
+    private Camera UICamera;
 
     enum MvInputKey {
         Key_Neutral = 0,
@@ -63,9 +73,6 @@ public class Movement : NetworkBehaviour
             UIHandler = GameObject.FindGameObjectWithTag("UIHandler");
             UIHandlerScript = UIHandler.GetComponent<UIHandler>();
 
-            ServerManager = GameObject.FindGameObjectWithTag("ServerManager");
-            ServerManagerScript = ServerManager.GetComponent<ServerManager>();
-
             tileLayer = LayerMask.GetMask("TileMap");
             UIHandlerScript.GameUI.enabled = true;
 
@@ -75,71 +82,124 @@ public class Movement : NetworkBehaviour
         if (!IsOwner)
         {
             GetComponent<SpriteRenderer>().color = PlayerColours[OwnerClientId];
+
+            GameUI = GameObject.FindGameObjectWithTag("GameUI");
+
+            InstantiatedPlayerPrefab = Instantiate(PlayerArrowPrefab, GameUI.transform);
+            InstantiatedPlayerPrefab.GetComponent<Image>().color = PlayerColours[OwnerClientId];
+
+            ArrowRectTransform = InstantiatedPlayerPrefab.GetComponent<RectTransform>();
+
+            UICamera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
         }
 
         transform.position = new Vector3(250, 200, 0);
     }
 
-    public void SetColour()
-    {
-
-    }
-
     void Update()
     {
-        if (!IsOwner) return;
-
-        Key = MvInputKey.Key_Neutral;
-
-        if (Input.GetKey(KeyCode.A)) {
-            if (fuelRemaining > 0)
-            {
-                Key |= MvInputKey.Key_Left;
-            }
-
-            else
-            {
-                fuelRemaining = 0;
-            }
-        }
-    
-        if (Input.GetKey(KeyCode.D)) {
-            if (fuelRemaining > 0)
-            {
-                Key |= MvInputKey.Key_Right;
-            }
-
-            else
-            {
-                fuelRemaining = 0;
-            }
-        }
-
-        FuelPercentageText.text = (Math.Round((fuelRemaining / fuel) * 100, 0) + "%");
-        currentRotation = transform.rotation.z * 180;
-
-        rayOrigin = transform.position;
-        rayDirection = Vector2.down;
-        landOffset = new Vector2(0.2f, 0);
-
-        landCheckL = Physics2D.Raycast(rayOrigin - landOffset, rayDirection, 1.5f, tileLayer);
-        landCheckR = Physics2D.Raycast(rayOrigin + landOffset, rayDirection, 1.5f, tileLayer);
-
-        Debug.DrawRay(rayOrigin - landOffset, rayDirection, Color.green);
-        Debug.DrawRay(rayOrigin + landOffset, rayDirection, Color.green);
-
-        if ((-landPrecision <= currentRotation && currentRotation <= landPrecision) && (landCheckL.collider != null || landCheckR.collider != null))
+        if (IsOwner)
         {
+            Key = MvInputKey.Key_Neutral;
 
-            if (fuelRemaining <= fuel)
+            if (Input.GetKey(KeyCode.A))
             {
-                fuelRemaining += refuelSpeed;
+                if (fuelRemaining > 0)
+                {
+                    Key |= MvInputKey.Key_Left;
+                }
+
+                else
+                {
+                    fuelRemaining = 0;
+                }
+            }
+
+            if (Input.GetKey(KeyCode.D))
+            {
+                if (fuelRemaining > 0)
+                {
+                    Key |= MvInputKey.Key_Right;
+                }
+
+                else
+                {
+                    fuelRemaining = 0;
+                }
+            }
+
+            FuelPercentageText.text = (Math.Round((fuelRemaining / fuel) * 100, 0) + "%");
+            currentRotation = transform.rotation.z * 180;
+
+            rayOrigin = transform.position;
+            rayDirection = Vector2.down;
+            landOffset = new Vector2(0.2f, 0);
+
+            landCheckL = Physics2D.Raycast(rayOrigin - landOffset, rayDirection, 1.5f, tileLayer);
+            landCheckR = Physics2D.Raycast(rayOrigin + landOffset, rayDirection, 1.5f, tileLayer);
+
+            Debug.DrawRay(rayOrigin - landOffset, rayDirection, Color.green);
+            Debug.DrawRay(rayOrigin + landOffset, rayDirection, Color.green);
+
+            if ((-landPrecision <= currentRotation && currentRotation <= landPrecision) && (landCheckL.collider != null || landCheckR.collider != null))
+            {
+
+                if (fuelRemaining <= fuel)
+                {
+                    fuelRemaining += refuelSpeed;
+                }
+
+                else
+                {
+                    fuelRemaining = fuel;
+                }
+            }
+        }
+
+        if (!IsOwner)
+        {
+            Vector3 toPosition = transform.position;
+            Vector3 fromPosition = Camera.main.transform.position;
+            fromPosition.z = 0f;
+            Vector3 direction = (toPosition - fromPosition).normalized;
+            float angle = ((Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg) % 360);
+            ArrowRectTransform.localEulerAngles = new Vector3(0, 0, angle);
+
+            targetPositionScreenPoint = Camera.main.WorldToScreenPoint(transform.position);
+            bool IsOffScreen = targetPositionScreenPoint.x <= BorderSize || targetPositionScreenPoint.x >= Screen.width - BorderSize || targetPositionScreenPoint.y <= BorderSize || targetPositionScreenPoint.y >= Screen.height - BorderSize;
+
+            float Distance = Vector3.Distance(transform.position, PointerWorldPosition);
+
+            Color NewColour = InstantiatedPlayerPrefab.GetComponent<Image>().color;
+            NewColour.a = (Distance / BorderSize);
+            InstantiatedPlayerPrefab.GetComponent<Image>().color = NewColour;
+
+            if (IsOffScreen)
+            {
+                if (!InstantiatedPlayerPrefab.activeSelf)
+                {
+                    InstantiatedPlayerPrefab.SetActive(true);
+                }
+                CappedTargetScreenPosition = targetPositionScreenPoint;
+                if (CappedTargetScreenPosition.x <= BorderSize) CappedTargetScreenPosition.x = BorderSize;
+                if (CappedTargetScreenPosition.x >= Screen.width - BorderSize) CappedTargetScreenPosition.x = Screen.width - BorderSize;
+
+                if (CappedTargetScreenPosition.y <= BorderSize) CappedTargetScreenPosition.y = BorderSize;
+                if (CappedTargetScreenPosition.y >= Screen.height - BorderSize) CappedTargetScreenPosition.y = Screen.height - BorderSize;
+
+                PointerWorldPosition = UICamera.ScreenToWorldPoint(CappedTargetScreenPosition);
+                ArrowRectTransform.position = PointerWorldPosition;
+                ArrowRectTransform.localPosition = new Vector3(ArrowRectTransform.localPosition.x, ArrowRectTransform.localPosition.y, 0f);
             }
 
             else
             {
-                fuelRemaining = fuel;
+                PointerWorldPosition = UICamera.ScreenToWorldPoint(targetPositionScreenPoint);
+                ArrowRectTransform.position = PointerWorldPosition;
+                ArrowRectTransform.localPosition = new Vector3(ArrowRectTransform.localPosition.x, ArrowRectTransform.localPosition.y, 0f);
+
             }
+
         }
     }
 

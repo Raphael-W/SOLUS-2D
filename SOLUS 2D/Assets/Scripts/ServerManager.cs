@@ -1,7 +1,6 @@
 using UnityEngine;
 using Unity.Netcode;
 using Unity.Netcode.Transports.UTP;
-using System.Collections.Generic;
 
 public class ServerManager : NetworkBehaviour
 {

@@ -8,6 +8,7 @@ public class ConnectionHandler : MonoBehaviour
     public GameObject ErrorMessage;
     private GameObject InstantiatedErrorMessage;
     private GameObject ErrorMessageText;
+    private string DisconnectReason;
 
     private void Start()
     {
@@ -32,11 +33,21 @@ public class ConnectionHandler : MonoBehaviour
 
     private void OnClientDisconnectCallback(ulong obj)
     {
-        if (!NetworkManager.Singleton.IsServer)// && NetworkManager.Singleton.DisconnectReason != string.Empty)
+        if (!NetworkManager.Singleton.IsServer)
         {
+            if (NetworkManager.Singleton.DisconnectReason == string.Empty)
+            {
+                DisconnectReason = "Disconnected";
+            }
+
+            else
+            {
+                DisconnectReason = NetworkManager.Singleton.DisconnectReason;
+            }
+
             InstantiatedErrorMessage = Instantiate(ErrorMessage, new Vector3(0, 0, 0), Quaternion.identity);
             ErrorMessageText = InstantiatedErrorMessage.transform.Find("Message").gameObject;
-            ErrorMessageText.GetComponent<TMP_Text>().text = ("ERROR: " + NetworkManager.Singleton.DisconnectReason);
+            ErrorMessageText.GetComponent<TMP_Text>().text = ("ERROR: " + DisconnectReason);
         }
     }
 

@@ -43,7 +43,7 @@ public class Movement : NetworkBehaviour
 
     public Color[] PlayerColours;
 
-    private GameObject GameUI;
+    private GameObject ArrowUI;
     public GameObject PlayerArrowPrefab;
     private RectTransform ArrowRectTransform;
     private GameObject InstantiatedPlayerPrefab;
@@ -83,9 +83,9 @@ public class Movement : NetworkBehaviour
         {
             GetComponent<SpriteRenderer>().color = PlayerColours[OwnerClientId];
 
-            GameUI = GameObject.FindGameObjectWithTag("GameUI");
+            ArrowUI = transform.Find("ArrowUI").gameObject;
 
-            InstantiatedPlayerPrefab = Instantiate(PlayerArrowPrefab, GameUI.transform);
+            InstantiatedPlayerPrefab = Instantiate(PlayerArrowPrefab, ArrowUI.transform);
             InstantiatedPlayerPrefab.GetComponent<Image>().color = PlayerColours[OwnerClientId];
 
             ArrowRectTransform = InstantiatedPlayerPrefab.GetComponent<RectTransform>();

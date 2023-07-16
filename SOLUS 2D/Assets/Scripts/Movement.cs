@@ -146,13 +146,13 @@ public class Movement : NetworkBehaviour
 
     void Update()
     {
-        if (!ValidSpawn)
-        {
-            FindSpawnPoint();
-        }
-
         if (IsOwner)
         {
+            if (!ValidSpawn)
+            {
+                FindSpawnPoint();
+            }
+
             Key = MvInputKey.Key_Neutral;
 
             if (Input.GetKey(KeyCode.A))

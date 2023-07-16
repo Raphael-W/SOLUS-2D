@@ -26,7 +26,8 @@ public class Generation : MonoBehaviour
         SeedBoxText = SeedBox.GetComponent<TMP_Text>();
         SeedBoxText.text = ("Seed: " + seed);
 
-        Random.InitState(seed);
+        //Random.InitState(seed);
+        Random.InitState(8772152);
 
         InitialiseTiles();
 

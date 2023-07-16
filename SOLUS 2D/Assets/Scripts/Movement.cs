@@ -55,11 +55,46 @@ public class Movement : NetworkBehaviour
 
     private Camera UICamera;
 
+    private bool ValidSpawn;
+    private Vector3 SpawnLocation;
+    private GameObject MapGenerator;
+    private Generation GenerationScript;
+    private int MapSize;
+    private RaycastHit2D SpawnCheckDownL;
+    private RaycastHit2D SpawnCheckDownR;
+
+    private RaycastHit2D SpawnCheckUpL;
+    private RaycastHit2D SpawnCheckUpR;
+    public int SpawnSpace;
+
     enum MvInputKey {
         Key_Neutral = 0,
         Key_Left = 1,
         Key_Right = 2,
     };
+
+    public Vector2 FindSpawnPoint()
+    {
+        MapGenerator = GameObject.FindGameObjectWithTag("MainUniverseTag");
+        GenerationScript = MapGenerator.GetComponent<Generation>();
+        MapSize = GenerationScript.MapSize;
+
+        ValidSpawn = false;
+        while (!ValidSpawn)
+        {
+            rayOrigin = new Vector3(UnityEngine.Random.Range(5, MapSize - 5), UnityEngine.Random.Range(5, MapSize - 5), 0);
+
+            SpawnCheckDownL = Physics2D.Raycast(rayOrigin + landOffset, Vector2.down, SpawnSpace, tileLayer);
+            SpawnCheckDownR = Physics2D.Raycast(rayOrigin - landOffset, Vector2.down, SpawnSpace, tileLayer);
+
+            SpawnCheckUpL = Physics2D.Raycast(rayOrigin + landOffset, Vector2.down, SpawnSpace, tileLayer);
+            SpawnCheckUpR = Physics2D.Raycast(rayOrigin - landOffset, Vector2.down, SpawnSpace, tileLayer);
+
+            ValidSpawn = Mathf.Min(SpawnCheckDownL.distance, SpawnCheckDownR.distance) + Mathf.Min(SpawnCheckUpL.distance, SpawnCheckUpR.distance) >= SpawnSpace;
+        }
+
+        return (rayOrigin - new Vector2(0, Mathf.Min(SpawnCheckDownL.distance, SpawnCheckDownR.distance)) + new Vector2(0, 2));
+    }
 
     public override void OnNetworkSpawn()
     {
@@ -77,6 +112,8 @@ public class Movement : NetworkBehaviour
             UIHandlerScript.GameUI.enabled = true;
 
             fuelRemaining = fuel;
+
+            transform.position = FindSpawnPoint();
         }
 
         if (!IsOwner)
@@ -92,8 +129,6 @@ public class Movement : NetworkBehaviour
 
             UICamera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
         }
-
-        transform.position = new Vector3(250, 200, 0);
     }
 
     void Update()

@@ -26,8 +26,7 @@ public class Generation : MonoBehaviour
         SeedBoxText = SeedBox.GetComponent<TMP_Text>();
         SeedBoxText.text = ("Seed: " + seed);
 
-        //Random.InitState(seed);
-        Random.InitState(8772152);
+        Random.InitState(seed);
 
         InitialiseTiles();
 
@@ -37,12 +36,6 @@ public class Generation : MonoBehaviour
         }
 
         DisplayMap();
-
-        SceneManager.UnloadSceneAsync("MainMenu");
-
-        var lastSceneIndex = SceneManager.sceneCount - 1;
-        var lastLoadedScene = SceneManager.GetSceneAt(lastSceneIndex);
-        SceneManager.UnloadSceneAsync(lastLoadedScene);
     }
 
     private void InitialiseTiles()

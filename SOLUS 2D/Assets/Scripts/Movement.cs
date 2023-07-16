@@ -3,6 +3,7 @@ using UnityEngine;
 using Unity.Netcode;
 using TMPro;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 //using UnityEngine.UIElements;
 
 public class Movement : NetworkBehaviour
@@ -65,6 +66,9 @@ public class Movement : NetworkBehaviour
 
     private RaycastHit2D SpawnCheckUpL;
     private RaycastHit2D SpawnCheckUpR;
+
+    private bool Flat;
+
     public int SpawnSpace;
 
     enum MvInputKey {
@@ -73,27 +77,38 @@ public class Movement : NetworkBehaviour
         Key_Right = 2,
     };
 
-    public Vector2 FindSpawnPoint()
+    public void FindSpawnPoint()
     {
         MapGenerator = GameObject.FindGameObjectWithTag("MainUniverseTag");
         GenerationScript = MapGenerator.GetComponent<Generation>();
         MapSize = GenerationScript.MapSize;
 
         ValidSpawn = false;
-        while (!ValidSpawn)
+        for (int i = 0; i <= 0; i++)
         {
             rayOrigin = new Vector3(UnityEngine.Random.Range(5, MapSize - 5), UnityEngine.Random.Range(5, MapSize - 5), 0);
 
-            SpawnCheckDownL = Physics2D.Raycast(rayOrigin + landOffset, Vector2.down, SpawnSpace, tileLayer);
-            SpawnCheckDownR = Physics2D.Raycast(rayOrigin - landOffset, Vector2.down, SpawnSpace, tileLayer);
+            SpawnCheckDownL = Physics2D.Raycast(rayOrigin + landOffset, Vector2.down, Mathf.Infinity, tileLayer);
+            SpawnCheckDownR = Physics2D.Raycast(rayOrigin - landOffset, Vector2.down, Mathf.Infinity, tileLayer);
 
-            SpawnCheckUpL = Physics2D.Raycast(rayOrigin + landOffset, Vector2.down, SpawnSpace, tileLayer);
-            SpawnCheckUpR = Physics2D.Raycast(rayOrigin - landOffset, Vector2.down, SpawnSpace, tileLayer);
+            Flat = (SpawnCheckDownL.distance == SpawnCheckDownR.distance);
 
-            ValidSpawn = Mathf.Min(SpawnCheckDownL.distance, SpawnCheckDownR.distance) + Mathf.Min(SpawnCheckUpL.distance, SpawnCheckUpR.distance) >= SpawnSpace;
+            SpawnCheckUpL = Physics2D.Raycast(rayOrigin + landOffset, Vector2.up, Mathf.Infinity, tileLayer);
+            SpawnCheckUpR = Physics2D.Raycast(rayOrigin - landOffset, Vector2.up, Mathf.Infinity, tileLayer);
+
+            ValidSpawn = (Mathf.Min(SpawnCheckDownL.distance, SpawnCheckDownR.distance) + Mathf.Min(SpawnCheckUpL.distance, SpawnCheckUpR.distance) >= SpawnSpace) && Flat;
+            if (ValidSpawn)
+            {
+                transform.position = (rayOrigin - new Vector2(0, Mathf.Min(SpawnCheckDownL.distance, SpawnCheckDownR.distance)) + new Vector2(0, 2));
+                transform.rotation = Quaternion.Euler(0f, 0, 0f);
+
+                SceneManager.UnloadSceneAsync("MainMenu");
+
+                var lastSceneIndex = SceneManager.sceneCount - 1;
+                var lastLoadedScene = SceneManager.GetSceneAt(lastSceneIndex);
+                SceneManager.UnloadSceneAsync(lastLoadedScene);
+            }
         }
-
-        return (rayOrigin - new Vector2(0, Mathf.Min(SpawnCheckDownL.distance, SpawnCheckDownR.distance)) + new Vector2(0, 2));
     }
 
     public override void OnNetworkSpawn()
@@ -112,8 +127,6 @@ public class Movement : NetworkBehaviour
             UIHandlerScript.GameUI.enabled = true;
 
             fuelRemaining = fuel;
-
-            transform.position = FindSpawnPoint();
         }
 
         if (!IsOwner)
@@ -133,6 +146,11 @@ public class Movement : NetworkBehaviour
 
     void Update()
     {
+        if (!ValidSpawn)
+        {
+            FindSpawnPoint();
+        }
+
         if (IsOwner)
         {
             Key = MvInputKey.Key_Neutral;

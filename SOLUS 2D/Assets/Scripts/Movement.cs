@@ -57,7 +57,6 @@ public class Movement : NetworkBehaviour
     private Camera UICamera;
 
     private bool ValidSpawn;
-    private Vector3 SpawnLocation;
     private GameObject MapGenerator;
     private Generation GenerationScript;
     private int MapSize;
@@ -66,10 +65,10 @@ public class Movement : NetworkBehaviour
 
     private RaycastHit2D SpawnCheckUpL;
     private RaycastHit2D SpawnCheckUpR;
-
     private bool Flat;
-
     public int SpawnSpace;
+
+    private int PlayerSpawned;
 
     enum MvInputKey {
         Key_Neutral = 0,
@@ -77,37 +76,44 @@ public class Movement : NetworkBehaviour
         Key_Right = 2,
     };
 
-    public void FindSpawnPoint()
+    private void Awake()
     {
         MapGenerator = GameObject.FindGameObjectWithTag("MainUniverseTag");
         GenerationScript = MapGenerator.GetComponent<Generation>();
+
+        FuelPercentage = GameObject.FindGameObjectWithTag("FuelPercentage");
+        FuelPercentageText = FuelPercentage.GetComponent<TMP_Text>();
+
+        UIHandler = GameObject.FindGameObjectWithTag("UIHandler");
+        UIHandlerScript = UIHandler.GetComponent<UIHandler>();
+    }
+
+    public int FindSpawnPoint(int countdown)
+    {
         MapSize = GenerationScript.MapSize;
-
         ValidSpawn = false;
-        for (int i = 0; i <= 0; i++)
+        rayOrigin = new Vector3(UnityEngine.Random.Range(5, MapSize - 5), UnityEngine.Random.Range(5, MapSize - 5), 0);
+
+        SpawnCheckDownL = Physics2D.Raycast(rayOrigin + landOffset, Vector2.down, Mathf.Infinity, tileLayer);
+        SpawnCheckDownR = Physics2D.Raycast(rayOrigin - landOffset, Vector2.down, Mathf.Infinity, tileLayer);
+
+        Flat = (SpawnCheckDownL.distance == SpawnCheckDownR.distance);
+
+        SpawnCheckUpL = Physics2D.Raycast(rayOrigin + landOffset, Vector2.up, Mathf.Infinity, tileLayer);
+        SpawnCheckUpR = Physics2D.Raycast(rayOrigin - landOffset, Vector2.up, Mathf.Infinity, tileLayer);
+
+        ValidSpawn = (Mathf.Min(SpawnCheckDownL.distance, SpawnCheckDownR.distance) + Mathf.Min(SpawnCheckUpL.distance, SpawnCheckUpR.distance) >= SpawnSpace) && Flat;
+        if (ValidSpawn)
         {
-            rayOrigin = new Vector3(UnityEngine.Random.Range(5, MapSize - 5), UnityEngine.Random.Range(5, MapSize - 5), 0);
+            Debug.Log(rayOrigin - new Vector2(0, Mathf.Min(SpawnCheckDownL.distance, SpawnCheckDownR.distance)) + new Vector2(0, 2));
+            transform.position = (rayOrigin - new Vector2(0, Mathf.Min(SpawnCheckDownL.distance, SpawnCheckDownR.distance)) + new Vector2(0, 2));
+            transform.rotation = Quaternion.Euler(0f, 0, 0f);
+            return countdown -= 1;
+        }
 
-            SpawnCheckDownL = Physics2D.Raycast(rayOrigin + landOffset, Vector2.down, Mathf.Infinity, tileLayer);
-            SpawnCheckDownR = Physics2D.Raycast(rayOrigin - landOffset, Vector2.down, Mathf.Infinity, tileLayer);
-
-            Flat = (SpawnCheckDownL.distance == SpawnCheckDownR.distance);
-
-            SpawnCheckUpL = Physics2D.Raycast(rayOrigin + landOffset, Vector2.up, Mathf.Infinity, tileLayer);
-            SpawnCheckUpR = Physics2D.Raycast(rayOrigin - landOffset, Vector2.up, Mathf.Infinity, tileLayer);
-
-            ValidSpawn = (Mathf.Min(SpawnCheckDownL.distance, SpawnCheckDownR.distance) + Mathf.Min(SpawnCheckUpL.distance, SpawnCheckUpR.distance) >= SpawnSpace) && Flat;
-            if (ValidSpawn)
-            {
-                transform.position = (rayOrigin - new Vector2(0, Mathf.Min(SpawnCheckDownL.distance, SpawnCheckDownR.distance)) + new Vector2(0, 2));
-                transform.rotation = Quaternion.Euler(0f, 0, 0f);
-
-                SceneManager.UnloadSceneAsync("MainMenu");
-
-                var lastSceneIndex = SceneManager.sceneCount - 1;
-                var lastLoadedScene = SceneManager.GetSceneAt(lastSceneIndex);
-                SceneManager.UnloadSceneAsync(lastLoadedScene);
-            }
+        else
+        {
+            return countdown;
         }
     }
 
@@ -115,13 +121,8 @@ public class Movement : NetworkBehaviour
     {
         if (IsOwner)
         {
+            PlayerSpawned = Convert.ToInt32(OwnerClientId);
             RigidBody = GetComponent<Rigidbody2D>();
-
-            FuelPercentage = GameObject.FindGameObjectWithTag("FuelPercentage");
-            FuelPercentageText = FuelPercentage.GetComponent<TMP_Text>();
-
-            UIHandler = GameObject.FindGameObjectWithTag("UIHandler");
-            UIHandlerScript = UIHandler.GetComponent<UIHandler>();
 
             tileLayer = LayerMask.GetMask("TileMap");
             UIHandlerScript.GameUI.enabled = true;
@@ -146,13 +147,13 @@ public class Movement : NetworkBehaviour
 
     void Update()
     {
+        if ((PlayerSpawned >= 0) && IsOwner)
+        {
+            PlayerSpawned = FindSpawnPoint(PlayerSpawned);
+        }
+
         if (IsOwner)
         {
-            if (!ValidSpawn)
-            {
-                FindSpawnPoint();
-            }
-
             Key = MvInputKey.Key_Neutral;
 
             if (Input.GetKey(KeyCode.A))

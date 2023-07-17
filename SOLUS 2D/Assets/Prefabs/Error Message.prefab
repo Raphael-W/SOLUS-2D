@@ -540,7 +540,8 @@ GameObject:
   - component: {fileID: 8796554538557060475}
   - component: {fileID: 4652813426353236656}
   - component: {fileID: 4264307417153518132}
-  - component: {fileID: 2491313937605726773}
+  - component: {fileID: 3644020719097975691}
+  - component: {fileID: 530371468554757581}
   m_Layer: 5
   m_Name: Close
   m_TagString: Untagged
@@ -651,7 +652,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2491313937605726773}
+      - m_Target: {fileID: 530371468554757581}
         m_TargetAssemblyTypeName: CloseMessage, Assembly-CSharp
         m_MethodName: Close
         m_Mode: 1
@@ -663,7 +664,39 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &2491313937605726773
+      - m_Target: {fileID: 3644020719097975691}
+        m_TargetAssemblyTypeName: UIHandler, Assembly-CSharp
+        m_MethodName: Home
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &3644020719097975691
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6807259368747222493}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b2dce1edd5da484fa0740924c41426b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  IPField: {fileID: 0}
+  StartButton: {fileID: 0}
+  JoinButton: {fileID: 0}
+  UISlider: {fileID: 0}
+  SettingsUI: {fileID: 0}
+  GameUI: {fileID: 0}
+  AllUI: []
+  SliderText: {fileID: 0}
+--- !u!114 &530371468554757581
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

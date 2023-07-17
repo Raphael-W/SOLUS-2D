@@ -20,8 +20,12 @@ public class Generation : MonoBehaviour
     private GameObject SeedBox;
     private TMP_Text SeedBoxText;
 
+    public bool MapLoaded;
+
     public void BeginGeneration(int seed)
     {
+        MapLoaded = false;
+
         SeedBox = GameObject.FindGameObjectWithTag("SeedBox");
         SeedBoxText = SeedBox.GetComponent<TMP_Text>();
         SeedBoxText.text = ("Seed: " + seed);
@@ -36,6 +40,13 @@ public class Generation : MonoBehaviour
         }
 
         DisplayMap();
+        MapLoaded = true;
+
+        SceneManager.UnloadSceneAsync("MainMenu");
+
+        var lastSceneIndex = SceneManager.sceneCount - 1;
+        var lastLoadedScene = SceneManager.GetSceneAt(lastSceneIndex);
+        SceneManager.UnloadSceneAsync(lastLoadedScene);
     }
 
     private void InitialiseTiles()

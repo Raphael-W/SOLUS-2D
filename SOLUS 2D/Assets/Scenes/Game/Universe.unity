@@ -1543,6 +1543,7 @@ MonoBehaviour:
   density: 65
   iterations: 10
   MapSize: 500
+  MapLoaded: 0
 --- !u!1001 &8417427070071033251
 PrefabInstance:
   m_ObjectHideFlags: 0

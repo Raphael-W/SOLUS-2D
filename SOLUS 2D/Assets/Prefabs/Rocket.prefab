@@ -199,6 +199,7 @@ MonoBehaviour:
   PlayerArrowPrefab: {fileID: 4172169807173216962, guid: 2f36174273cf1fd47882df315919ee44, type: 3}
   BorderSize: 60
   SpawnSpace: 5
+  BulletPrefab: {fileID: 7007304190448001459, guid: cc1e67be7727a1a48b9eca7e3b5ebd26, type: 3}
 --- !u!114 &3258634216313351779
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -71,6 +71,9 @@ public class Movement : NetworkBehaviour
 
     private int PlayerSpawned;
 
+    public GameObject BulletPrefab;
+    public GameObject SpawnedBullet;
+
     enum MvInputKey {
         Key_Neutral = 0,
         Key_Left = 1,
@@ -132,7 +135,6 @@ public class Movement : NetworkBehaviour
 
         if (!IsOwner)
         {
-            //PlayerColour = Color.HSVToRGB(UnityEngine.Random.Range(0f, 1f), 0.6f, 0.85f);
             PlayerColour = PlayerColours[OwnerClientId];
 
             GetComponent<SpriteRenderer>().color = PlayerColour;
@@ -183,6 +185,15 @@ public class Movement : NetworkBehaviour
                 {
                     fuelRemaining = 0;
                 }
+            }
+
+            if (Input.GetKey(KeyCode.W) ||  Input.GetKey(KeyCode.Space))
+            {
+                SpawnedBullet = Instantiate(BulletPrefab, transform.position, Quaternion.identity);
+                SpawnedBullet.GetComponent<NetworkObject>().Spawn();
+                SpawnedBullet.GetComponent<BulletController>().Direction = transform.up;
+                SpawnedBullet.GetComponent<BulletController>().shoot = true;
+
             }
 
             FuelPercentageText.text = (Math.Round((fuelRemaining / fuel) * 100, 0) + "%");

@@ -42,6 +42,7 @@ public class Movement : NetworkBehaviour
     private RaycastHit2D landCheckL;
     private RaycastHit2D landCheckR;
 
+    private Color PlayerColour;
     public Color[] PlayerColours;
 
     private GameObject ArrowUI;
@@ -105,7 +106,6 @@ public class Movement : NetworkBehaviour
         ValidSpawn = (Mathf.Min(SpawnCheckDownL.distance, SpawnCheckDownR.distance) + Mathf.Min(SpawnCheckUpL.distance, SpawnCheckUpR.distance) >= SpawnSpace) && Flat;
         if (ValidSpawn)
         {
-            Debug.Log(rayOrigin - new Vector2(0, Mathf.Min(SpawnCheckDownL.distance, SpawnCheckDownR.distance)) + new Vector2(0, 2));
             transform.position = (rayOrigin - new Vector2(0, Mathf.Min(SpawnCheckDownL.distance, SpawnCheckDownR.distance)) + new Vector2(0, 2));
             transform.rotation = Quaternion.Euler(0f, 0, 0f);
             return countdown -= 1;
@@ -132,12 +132,15 @@ public class Movement : NetworkBehaviour
 
         if (!IsOwner)
         {
-            GetComponent<SpriteRenderer>().color = PlayerColours[OwnerClientId];
+            //PlayerColour = Color.HSVToRGB(UnityEngine.Random.Range(0f, 1f), 0.6f, 0.85f);
+            PlayerColour = PlayerColours[OwnerClientId];
+
+            GetComponent<SpriteRenderer>().color = PlayerColour;
 
             ArrowUI = transform.Find("ArrowUI").gameObject;
 
             InstantiatedPlayerPrefab = Instantiate(PlayerArrowPrefab, ArrowUI.transform);
-            InstantiatedPlayerPrefab.GetComponent<Image>().color = PlayerColours[OwnerClientId];
+            InstantiatedPlayerPrefab.GetComponent<Image>().color = PlayerColour;
 
             ArrowRectTransform = InstantiatedPlayerPrefab.GetComponent<RectTransform>();
 

@@ -20,7 +20,7 @@ public class BulletController : NetworkBehaviour
     {
         if (IsOwner)
         {
-            Debug.Log("Owner");
+            Debug.Log(shoot + " - " + Direction);
             if (shoot)
             {
                 transform.position += Direction * MoveSpeed * Time.deltaTime;

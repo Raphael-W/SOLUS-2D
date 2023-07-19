@@ -79,7 +79,7 @@ public class ServerManager : NetworkBehaviour
     {
         //var clientId = serverRpcParams.Receive.SenderClientId;
         SpawnedBullet = Instantiate(BulletPrefab, position, rotation);
-        SpawnedBullet.GetComponent<NetworkObject>().SpawnWithOwnership(0);
+        SpawnedBullet.GetComponent<NetworkObject>().SpawnWithOwnership(ClientID);
         SpawnedBullet.GetComponent<BulletController>().Direction = direction;
         SpawnedBullet.GetComponent<BulletController>().shoot = true;
     }

@@ -30,7 +30,6 @@ public class BulletController : NetworkBehaviour
             if (shoot)
             {
                 transform.position += Direction * MoveSpeed * Time.deltaTime;
-                Debug.Log(Direction);
             }
         }    
     }

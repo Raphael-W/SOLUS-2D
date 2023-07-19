@@ -121,7 +121,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MoveSpeed: 20
-  ExplosionRadius: 1
+  ExplosionRadius: 2
 --- !u!61 &2649395632790860012
 BoxCollider2D:
   m_ObjectHideFlags: 0

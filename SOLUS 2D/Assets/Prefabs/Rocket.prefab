@@ -185,14 +185,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   RigidBody: {fileID: 4806035212878152609}
   Gun: {fileID: 9165212824188899312}
-  ExplosiveBullets: 20
+  Bullets: 20
+  ReloadSpeed: 0.01
+  landPrecision: 20
   rotationMomentum: 0.8
   mainThrust: 500
   rotationThrust: 200
-  fuel: 5000000
-  refuelSpeed: 1000
-  landPrecision: 20
-  fuelRemaining: 0
   PlayerColours:
   - {r: 1, g: 0.31764707, b: 0.31764707, a: 1}
   - {r: 0.43529412, g: 1, b: 0.4117647, a: 1}

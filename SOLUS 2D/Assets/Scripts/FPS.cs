@@ -7,6 +7,7 @@ public class FPS : MonoBehaviour
     public TMP_Text FPSText;
     public float fpsRefreshTime = 1f;
 
+
     private WaitForSecondsRealtime _waitForSecondsRealtime;
 
     private void OnValidate()
@@ -17,6 +18,7 @@ public class FPS : MonoBehaviour
 
     private IEnumerator Start()
     {
+        Application.targetFrameRate = 120;
 
         SetWaitForSecondsRealtime();
 

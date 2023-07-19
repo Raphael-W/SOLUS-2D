@@ -75,12 +75,10 @@ public class ServerManager : NetworkBehaviour
     }
 
     [ServerRpc(RequireOwnership = false)]
-    public void ShootBulletServerRpc(Vector3 position, Quaternion rotation, Vector3 direction, ulong ClientID)//ServerRpcParams serverRpcParams = default)
+    public void ShootBulletServerRpc(Vector3 position, Quaternion rotation, Vector3 direction, ulong ClientID)
     {
-        //var clientId = serverRpcParams.Receive.SenderClientId;
         SpawnedBullet = Instantiate(BulletPrefab, position, rotation);
         SpawnedBullet.GetComponent<NetworkObject>().SpawnWithOwnership(ClientID);
         SpawnedBullet.GetComponent<BulletController>().ReadyToShootClientRpc(direction);
-        //SpawnedBullet.GetComponent<NetworkObject>().ChangeOwnership(ClientID);
     }
 }

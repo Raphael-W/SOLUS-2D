@@ -807,6 +807,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   FPSText: {fileID: 1091265117}
+  fpsRefreshTime: 1
 --- !u!1 &1248369485
 GameObject:
   m_ObjectHideFlags: 0
@@ -1887,7 +1888,7 @@ GameObject:
   - component: {fileID: 7707551120140389122}
   - component: {fileID: 4527061810213001242}
   - component: {fileID: 8551988110157376536}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Grid
   m_TagString: Untagged
   m_Icon: {fileID: 0}

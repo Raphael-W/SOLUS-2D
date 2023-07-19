@@ -36,6 +36,7 @@ public class BulletController : NetworkBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        Debug.Log(collision.gameObject.layer == LayerMask.NameToLayer("TileMap"));
         GetComponent<NetworkObject>().Despawn();
     }
 }

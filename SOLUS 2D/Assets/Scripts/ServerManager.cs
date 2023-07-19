@@ -12,6 +12,9 @@ public class ServerManager : NetworkBehaviour
     private bool ClientReady;
     private bool ServerReady;
 
+    public GameObject BulletPrefab;
+    private GameObject SpawnedBullet;
+
     public void Awake()
     {
         DontDestroyOnLoad(gameObject);
@@ -69,5 +72,20 @@ public class ServerManager : NetworkBehaviour
             ClientReady = false;
             ServerReady = false;
         }
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    public void ShootBulletServerRpc(Vector3 position, Quaternion rotation, Vector3 direction, ulong ClientID)//ServerRpcParams serverRpcParams = default)
+    {
+        //var clientId = serverRpcParams.Receive.SenderClientId;
+        SpawnedBullet = Instantiate(BulletPrefab, position, rotation);
+        SpawnedBullet.GetComponent<NetworkObject>().SpawnWithOwnership(ClientID);
+        SpawnedBullet.GetComponent<BulletController>().Direction = direction;
+        SpawnedBullet.GetComponent<BulletController>().shoot = true;
+    }
+
+    public void Fire(Vector3 position, Quaternion rotation, Vector3 direction, ulong ClientID)
+    {
+        ShootBulletServerRpc(position, rotation, direction, ClientID);
     }
 }

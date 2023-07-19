@@ -71,8 +71,8 @@ public class Movement : NetworkBehaviour
 
     private int PlayerSpawned;
 
-    public GameObject BulletPrefab;
-    public GameObject SpawnedBullet;
+    private GameObject ServerManager;
+    private ServerManager ServerManagerScript;
 
     enum MvInputKey {
         Key_Neutral = 0,
@@ -90,6 +90,9 @@ public class Movement : NetworkBehaviour
 
         UIHandler = GameObject.FindGameObjectWithTag("UIHandler");
         UIHandlerScript = UIHandler.GetComponent<UIHandler>();
+
+        ServerManager = GameObject.FindGameObjectWithTag("ServerManager");
+        ServerManagerScript = ServerManager.GetComponent<ServerManager>();
     }
 
     public int FindSpawnPoint(int countdown)
@@ -149,6 +152,7 @@ public class Movement : NetworkBehaviour
             UICamera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
         }
     }
+    
 
     void Update()
     {
@@ -187,13 +191,9 @@ public class Movement : NetworkBehaviour
                 }
             }
 
-            if (Input.GetKey(KeyCode.W) ||  Input.GetKey(KeyCode.Space))
+            if (Input.GetKeyDown(KeyCode.W) ||  Input.GetKeyDown(KeyCode.Space))
             {
-                SpawnedBullet = Instantiate(BulletPrefab, transform.position, Quaternion.identity);
-                SpawnedBullet.GetComponent<NetworkObject>().Spawn();
-                SpawnedBullet.GetComponent<BulletController>().Direction = transform.up;
-                SpawnedBullet.GetComponent<BulletController>().shoot = true;
-
+                ServerManagerScript.Fire(transform.position, Quaternion.identity, transform.up, OwnerClientId);
             }
 
             FuelPercentageText.text = (Math.Round((fuelRemaining / fuel) * 100, 0) + "%");

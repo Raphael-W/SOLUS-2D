@@ -1,6 +1,5 @@
 using Unity.Netcode;
 using UnityEngine;
-using UnityEngine.Rendering;
 
 public class BulletController : MonoBehaviour
 {
@@ -19,6 +18,7 @@ public class BulletController : MonoBehaviour
 
     void Update()
     {
+        Debug.Log(shoot + " - " + Direction + ", " + MoveSpeed);
         if (shoot)
         {
             transform.position += Direction * MoveSpeed * Time.deltaTime;

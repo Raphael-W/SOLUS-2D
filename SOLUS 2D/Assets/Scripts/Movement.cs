@@ -11,6 +11,11 @@ public class Movement : NetworkBehaviour
 
     public Rigidbody2D RigidBody;
 
+    [Header("Shoot Settings")]
+    public GameObject Gun;
+    public int ExplosiveBullets;
+    private bool Explosive;
+
     private MvInputKey Key;
 
     [Header("Movement Settings")]
@@ -193,7 +198,15 @@ public class Movement : NetworkBehaviour
 
             if (Input.GetKeyDown(KeyCode.W) ||  Input.GetKeyDown(KeyCode.Space))
             {
-                ServerManagerScript.ShootBulletServerRpc(transform.position, Quaternion.identity, transform.up, OwnerClientId);
+                if ((Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl)) && (ExplosiveBullets > 0))
+                {
+                    Explosive = true;
+                }
+
+                Vector3 ShootDirection = (Gun.transform.position - transform.position).normalized;
+                ServerManagerScript.ShootBulletServerRpc(Gun.transform.position, Quaternion.identity, ShootDirection, RigidBody.velocity.magnitude, Explosive, OwnerClientId);
+                ExplosiveBullets -= 1;
+                Explosive = false;
             }
 
             FuelPercentageText.text = (Math.Round((fuelRemaining / fuel) * 100, 0) + "%");

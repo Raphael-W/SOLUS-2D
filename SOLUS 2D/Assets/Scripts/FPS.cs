@@ -25,7 +25,7 @@ public class FPS : MonoBehaviour
         while (true)
         {
 
-            FPSText.text = ((int)(1 / Time.unscaledDeltaTime)).ToString();
+            FPSText.text = ((int)(1 / Time.unscaledDeltaTime)) + "fps".ToString();
             yield return _waitForSecondsRealtime;
         }
     }

@@ -37,6 +37,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7637230819227091229}
+  - {fileID: 2219516701625470649}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -183,6 +184,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   RigidBody: {fileID: 4806035212878152609}
+  Gun: {fileID: 9165212824188899312}
+  ExplosiveBullets: 20
   rotationMomentum: 0.8
   mainThrust: 500
   rotationThrust: 200
@@ -199,7 +202,6 @@ MonoBehaviour:
   PlayerArrowPrefab: {fileID: 4172169807173216962, guid: 2f36174273cf1fd47882df315919ee44, type: 3}
   BorderSize: 60
   SpawnSpace: 5
-  BulletPrefab: {fileID: 7007304190448001459, guid: cc1e67be7727a1a48b9eca7e3b5ebd26, type: 3}
 --- !u!114 &3258634216313351779
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -390,3 +392,34 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ArrowUI: {fileID: 7626319474369534757}
+--- !u!1 &9165212824188899312
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2219516701625470649}
+  m_Layer: 0
+  m_Name: Gun
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2219516701625470649
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9165212824188899312}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.08, z: 0}
+  m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6079891008124566134}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

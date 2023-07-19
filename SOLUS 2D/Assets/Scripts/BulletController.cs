@@ -18,11 +18,13 @@ public class BulletController : NetworkBehaviour
 
     void Update()
     {
-        Debug.Log(shoot + " - " + Direction + ", " + MoveSpeed);
-        if (shoot)
+        if (IsOwner)
         {
-            transform.position += Direction * MoveSpeed * Time.deltaTime;
-        }
+            if (shoot)
+            {
+                transform.position += Direction * MoveSpeed * Time.deltaTime;
+            }
+        }    
     }
 
     private void OnTriggerEnter2D(Collider2D collision)

@@ -16,11 +16,17 @@ public class BulletController : NetworkBehaviour
         BoxCollider = GetComponent<BoxCollider2D>();
     }
 
+    [ClientRpc]
+    public void ReadyToShootClientRpc(Vector3 direction)
+    {
+        shoot = true;
+        Direction = direction;
+    }
+
     void Update()
     {
         if (IsOwner)
         {
-            Debug.Log(shoot + " - " + Direction);
             if (shoot)
             {
                 transform.position += Direction * MoveSpeed * Time.deltaTime;

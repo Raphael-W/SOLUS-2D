@@ -193,7 +193,7 @@ public class Movement : NetworkBehaviour
 
             if (Input.GetKeyDown(KeyCode.W) ||  Input.GetKeyDown(KeyCode.Space))
             {
-                ServerManagerScript.Fire(transform.position, Quaternion.identity, transform.up, OwnerClientId);
+                ServerManagerScript.ShootBulletServerRpc(transform.position, Quaternion.identity, transform.up, OwnerClientId);
             }
 
             FuelPercentageText.text = (Math.Round((fuelRemaining / fuel) * 100, 0) + "%");

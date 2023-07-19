@@ -12,7 +12,7 @@ public class BulletController : NetworkBehaviour
 
     private void Awake()
     {
-        shoot = false;
+        //shoot = false;
         BoxCollider = GetComponent<BoxCollider2D>();
     }
 

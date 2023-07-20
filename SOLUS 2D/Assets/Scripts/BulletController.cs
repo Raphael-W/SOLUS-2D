@@ -24,6 +24,8 @@ public class BulletController : NetworkBehaviour
     private bool Border;
     private bool hit;
 
+    private bool hitSelf;
+
     private void Awake()
     {
         shoot = false;
@@ -85,7 +87,9 @@ public class BulletController : NetworkBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (IsOwner)
+        hitSelf = ((collision.gameObject.layer == LayerMask.NameToLayer("Players")) && (OwnerClientId == collision.gameObject.GetComponent<NetworkObject>().OwnerClientId));
+
+        if (IsOwner && !hitSelf)
         {
             ServerScript.DespawnBulletServerRpc(GetComponent<NetworkObject>().NetworkObjectId);
         }    
@@ -103,11 +107,14 @@ public class BulletController : NetworkBehaviour
             }
         }
 
-        hit = true;
-
-        if (collision.gameObject.layer == LayerMask.NameToLayer("Players"))
+        if (!hitSelf)
         {
-            Debug.Log(collision.gameObject.GetComponent<Movement>().Bullets);
+            hit = true;
+        }
+
+        if ((collision.gameObject.layer == LayerMask.NameToLayer("Players")) && !hitSelf)
+        {
+            collision.gameObject.GetComponent<Movement>().health--;
         }
     }
 }

@@ -23,6 +23,15 @@ public class Generation : NetworkBehaviour
 
     public bool MapLoaded;
 
+    public void LoadGame()
+    {
+        SceneManager.UnloadSceneAsync("MainMenu");
+
+        var lastSceneIndex = SceneManager.sceneCount - 1;
+        var lastLoadedScene = SceneManager.GetSceneAt(lastSceneIndex);
+        SceneManager.UnloadSceneAsync(lastLoadedScene);
+    }
+
     public void BeginGeneration(int seed)
     {
         MapLoaded = false;
@@ -42,12 +51,6 @@ public class Generation : NetworkBehaviour
 
         DisplayMap();
         MapLoaded = true;
-
-        SceneManager.UnloadSceneAsync("MainMenu");
-
-        var lastSceneIndex = SceneManager.sceneCount - 1;
-        var lastLoadedScene = SceneManager.GetSceneAt(lastSceneIndex);
-        SceneManager.UnloadSceneAsync(lastLoadedScene);
     }
 
     private void InitialiseTiles()

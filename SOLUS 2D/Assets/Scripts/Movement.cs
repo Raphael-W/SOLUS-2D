@@ -6,8 +6,9 @@ using UnityEngine.UI;
 
 public class Movement : NetworkBehaviour
 {
-
+    [Header("Player Settings")]
     public Rigidbody2D RigidBody;
+    public int health;
 
     [Header("Shoot Settings")]
     public GameObject Gun;
@@ -39,9 +40,10 @@ public class Movement : NetworkBehaviour
     private Vector2 landOffset;
     private RaycastHit2D landCheckL;
     private RaycastHit2D landCheckR;
-
-    private Color PlayerColour;
+    
+    [Header("Spawn Settings")]
     public Color[] PlayerColours;
+    private Color PlayerColour;
 
     private GameObject ArrowUI;
     public GameObject PlayerArrowPrefab;
@@ -65,7 +67,7 @@ public class Movement : NetworkBehaviour
     private RaycastHit2D SpawnCheckUpL;
     private RaycastHit2D SpawnCheckUpR;
     private bool Flat;
-    public int SpawnSpace;
+    public int SpawnHeadRoom;
     private bool landed;
 
     private int PlayerSpawned;
@@ -110,11 +112,16 @@ public class Movement : NetworkBehaviour
         SpawnCheckUpL = Physics2D.Raycast(rayOrigin + landOffset, Vector2.up, Mathf.Infinity, tileLayer);
         SpawnCheckUpR = Physics2D.Raycast(rayOrigin - landOffset, Vector2.up, Mathf.Infinity, tileLayer);
 
-        ValidSpawn = (Mathf.Min(SpawnCheckDownL.distance, SpawnCheckDownR.distance) + Mathf.Min(SpawnCheckUpL.distance, SpawnCheckUpR.distance) >= SpawnSpace) && Flat;
+        ValidSpawn = (Mathf.Min(SpawnCheckDownL.distance, SpawnCheckDownR.distance) + Mathf.Min(SpawnCheckUpL.distance, SpawnCheckUpR.distance) >= SpawnHeadRoom) && Flat;
         if (ValidSpawn)
         {
-            transform.position = (rayOrigin - new Vector2(0, Mathf.Min(SpawnCheckDownL.distance, SpawnCheckDownR.distance)) + new Vector2(0, 2));
-            transform.rotation = Quaternion.Euler(0f, 0, 0f);
+            if (countdown == 0)
+            {
+                transform.position = (rayOrigin - new Vector2(0, Mathf.Min(SpawnCheckDownL.distance, SpawnCheckDownR.distance)) + new Vector2(0, 2));
+                transform.rotation = Quaternion.Euler(0f, 0, 0f);
+
+                GenerationScript.LoadGame();
+            }
             return countdown -= 1;
         }
 

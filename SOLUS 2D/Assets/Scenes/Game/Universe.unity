@@ -881,7 +881,7 @@ GameObject:
   - component: {fileID: 943314287}
   m_Layer: 0
   m_Name: AudioManager
-  m_TagString: Untagged
+  m_TagString: AudioManager
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -901,12 +901,12 @@ MonoBehaviour:
   sounds:
   - name: Player Shoot
     clip: {fileID: 8300000, guid: be9c7f4464be84b4896afdd396c2b377, type: 3}
-    volume: 0.518
+    volume: 1
     pitch: 1
     source: {fileID: 0}
   - name: Explode
     clip: {fileID: 8300000, guid: 734c0ba0addd71e4e9d44b0df0e9a8a7, type: 3}
-    volume: 0.518
+    volume: 1
     pitch: 1
     source: {fileID: 0}
 --- !u!4 &943314288

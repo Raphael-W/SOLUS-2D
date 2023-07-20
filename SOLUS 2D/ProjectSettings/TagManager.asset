@@ -19,6 +19,7 @@ TagManager:
   - Virtual Camera
   - ArrowUI
   - BulletsDisplay
+  - AudioManager
   layers:
   - Default
   - TransparentFX

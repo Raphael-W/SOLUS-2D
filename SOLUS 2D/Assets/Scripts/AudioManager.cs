@@ -1,6 +1,7 @@
 using UnityEngine.Audio;
 using System;
 using UnityEngine;
+using Unity.Netcode;
 
 public class AudioManager : MonoBehaviour
 {
@@ -20,10 +21,12 @@ public class AudioManager : MonoBehaviour
         }
     }
 
-    public void Play (string name)
+    [ClientRpc]
+    public void PlayClientRpc(string name, Vector3 position)
     {
         Sound s = Array.Find(sounds, sound => sound.name == name);
-        s.source.Play();
+        Debug.Log(s.source.volume + " - " + s.volume * 10);
+        AudioSource.PlayClipAtPoint(s.source.clip, position, 1);
     }
 
 }

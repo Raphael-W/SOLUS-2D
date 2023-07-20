@@ -24,6 +24,8 @@ public class BulletController : NetworkBehaviour
     private bool Border;
     private bool hit;
 
+    private bool hitSelf;
+
     private void Awake()
     {
         shoot = false;
@@ -86,7 +88,9 @@ public class BulletController : NetworkBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (IsOwner)
+        hitSelf = ((collision.gameObject.layer == LayerMask.NameToLayer("Players")) && (OwnerClientId == collision.gameObject.GetComponent<NetworkObject>().OwnerClientId));
+
+        if (IsOwner && !hitSelf)
         {
             ServerScript.DespawnBulletServerRpc(GetComponent<NetworkObject>().NetworkObjectId);
         }    
@@ -94,22 +98,25 @@ public class BulletController : NetworkBehaviour
         if (collision.gameObject.layer == LayerMask.NameToLayer("TileMap") && !hit)
         {
             explosionPositions = GetPositionsInRadius(Vector3Int.FloorToInt(transform.position), ExplosionRadius);
+            ServerScript.PlaySoundServerRpc("Explode", transform.position);
             foreach (Vector3Int position in explosionPositions)
             {
                 Border = ((position.x == MapSize - 1) || (position.x == 0) || (position.y == MapSize - 1) || (position.y == 0));
                 if (!Border)
                 {
-                    FindObjectOfType<AudioManager>().Play("Explode");
                     ServerScript.ClearTileServerRpc(position);
                 }
             }
         }
 
-        hit = true;
-
-        if (collision.gameObject.layer == LayerMask.NameToLayer("Players"))
+        if (!hitSelf)
         {
-            Debug.Log(collision.gameObject.GetComponent<Movement>().Bullets);
+            hit = true;
+        }
+
+        if ((collision.gameObject.layer == LayerMask.NameToLayer("Players")) && !hitSelf)
+        {
+            collision.gameObject.GetComponent<Movement>().health--;
         }
     }
 }

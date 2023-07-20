@@ -108,4 +108,10 @@ public class ServerManager : NetworkBehaviour
         DestroyedTiles[DestroyedTileIndex] = Position;
         DestroyedTileIndex++;
     }
+
+    [ServerRpc(RequireOwnership = false)]
+    public void PlaySoundServerRpc(string name, Vector3 position)
+    {
+        FindObjectOfType<AudioManager>().PlayClientRpc(name, position);
+    }
 }

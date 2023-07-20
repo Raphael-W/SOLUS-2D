@@ -184,6 +184,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   RigidBody: {fileID: 4806035212878152609}
+  health: 5
   Gun: {fileID: 9165212824188899312}
   Bullets: 20
   ReloadSpeed: 0.01
@@ -199,7 +200,7 @@ MonoBehaviour:
   - {r: 1, g: 0.627451, b: 0.30980393, a: 1}
   PlayerArrowPrefab: {fileID: 4172169807173216962, guid: 2f36174273cf1fd47882df315919ee44, type: 3}
   BorderSize: 60
-  SpawnSpace: 5
+  SpawnHeadRoom: 5
 --- !u!114 &3258634216313351779
 MonoBehaviour:
   m_ObjectHideFlags: 0

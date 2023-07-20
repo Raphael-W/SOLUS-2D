@@ -28,8 +28,11 @@ public class UIHandler : MonoBehaviour
     public TMP_Text UISliderText;
     public TMP_Text SoundsSliderText;
 
+    private bool SettingsOpen;
+
     public void Awake()
     {
+        SettingsOpen = false;
         if (SceneManager.sceneCount == 1)
         {
             SettingsUI.enabled = false;
@@ -111,11 +114,13 @@ public class UIHandler : MonoBehaviour
         UISlider.value = PlayerPrefs.GetFloat("UISize", 10);
 
         SettingsUI.enabled = true;
+        SettingsOpen = true;
     }
 
     public void CloseSettings()
     {
         SettingsUI.enabled = false;
+        SettingsOpen = false;
     }
 
     public void UISizeChanged()
@@ -165,16 +170,19 @@ public class UIHandler : MonoBehaviour
 
     public void Update()
     {
-        if (!PauseUIChange)
+        if (SettingsOpen)
         {
-            SetUISize(PlayerPrefs.GetFloat("UISize", 10));
-        }
+            if (!PauseUIChange)
+            {
+                SetUISize(PlayerPrefs.GetFloat("UISize", 10));
+            }
 
-        else
-        {
-            UISliderText.text = UISlider.value.ToString();
-        }
+            else
+            {
+                UISliderText.text = UISlider.value.ToString();
+            }
 
-        SoundsSliderText.text = SoundsSlider.value.ToString();
+            SoundsSliderText.text = SoundsSlider.value.ToString();
+        }
     }
 }

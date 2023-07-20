@@ -18,13 +18,15 @@ public class UIHandler : MonoBehaviour
     private Generation generation;
 
     public Slider UISlider;
+    public Slider SoundsSlider;
 
     public Canvas SettingsUI;
     public Canvas GameUI;
 
     public Canvas[] AllUI;
     private bool PauseUIChange;
-    public TMP_Text SliderText;
+    public TMP_Text UISliderText;
+    public TMP_Text SoundsSliderText;
 
     public void Awake()
     {
@@ -121,6 +123,11 @@ public class UIHandler : MonoBehaviour
         PlayerPrefs.SetFloat("UISize", UISlider.value);
     }
 
+    public void SoundsChanged()
+    {
+        PlayerPrefs.SetFloat("Sounds", SoundsSlider.value);
+    }
+
     public void SetUISize(float size)
     {
         for (int i = 0; i < AllUI.Length; i++)
@@ -132,17 +139,23 @@ public class UIHandler : MonoBehaviour
     public void PauseUIChanges()
     {
         PauseUIChange = true;
-        //SliderText = GameObject.Find("Value").GetComponent<TMP_Text>();
-
-        SliderText.enabled = true;
+        UISliderText.enabled = true;
     }
 
     public void ResumeUIChanges()
     {
         PauseUIChange = false;
-        //SliderText = GameObject.Find("Value").GetComponent<TMP_Text>();
+        UISliderText.enabled = false;
+    }
 
-        SliderText.enabled = false;
+    public void PauseSoundsChanges()
+    {
+        SoundsSliderText.enabled = true;
+    }
+
+    public void ResumeSoundsChanges()
+    {
+        SoundsSliderText.enabled = false;
     }
 
     public void Quit()
@@ -159,7 +172,9 @@ public class UIHandler : MonoBehaviour
 
         else
         {
-            SliderText.text = UISlider.value.ToString();
+            UISliderText.text = UISlider.value.ToString();
         }
+
+        SoundsSliderText.text = SoundsSlider.value.ToString();
     }
 }

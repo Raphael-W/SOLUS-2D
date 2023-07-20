@@ -15,6 +15,9 @@ public class BulletController : NetworkBehaviour
     private Generation GeneratorScript;
     private int MapSize;
 
+    private GameObject AudioManager;
+    private AudioManager AudioManagerScript;
+
     private GameObject Server;
     private ServerManager ServerScript;
 
@@ -37,6 +40,10 @@ public class BulletController : NetworkBehaviour
 
         Server = GameObject.FindGameObjectWithTag("ServerManager");
         ServerScript = Server.GetComponent<ServerManager>();
+
+        AudioManager = GameObject.FindGameObjectWithTag("AudioManager");
+        AudioManagerScript = AudioManager.GetComponent<AudioManager>();
+        AudioManagerScript.Play("Player Shoot", transform.position);
 
         MapSize = GeneratorScript.MapSize;
         

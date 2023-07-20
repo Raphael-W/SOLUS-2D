@@ -1,7 +1,5 @@
-using UnityEngine.Audio;
 using System;
 using UnityEngine;
-using Unity.Netcode;
 
 public class AudioManager : MonoBehaviour
 {
@@ -18,13 +16,14 @@ public class AudioManager : MonoBehaviour
 
             s.source.volume = s.volume;
             s.source.pitch = s.pitch;
+            s.source.spatialBlend = s.spatialBlend;
         }
     }
 
     public void Play(string name, Vector3 position)
     {
         Sound s = Array.Find(sounds, sound => sound.name == name);
-        AudioSource.PlayClipAtPoint(s.source.clip, position, 1);
+        AudioSource.PlayClipAtPoint(s.source.clip, position, s.volume * (PlayerPrefs.GetFloat("Sounds", 50)/100));
     }
 
 }

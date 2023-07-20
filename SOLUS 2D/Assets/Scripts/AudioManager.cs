@@ -25,7 +25,6 @@ public class AudioManager : MonoBehaviour
     public void PlayClientRpc(string name, Vector3 position)
     {
         Sound s = Array.Find(sounds, sound => sound.name == name);
-        Debug.Log(s.source.volume + " - " + s.volume * 10);
         AudioSource.PlayClipAtPoint(s.source.clip, position, 1);
     }
 

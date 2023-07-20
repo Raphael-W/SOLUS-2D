@@ -1056,7 +1056,7 @@ MonoBehaviour:
     pitch: 1
     source: {fileID: 0}
   - name: Explode
-    clip: {fileID: 8300000, guid: 9a200a24aed1d44d5b344ebb8418b23b, type: 3}
+    clip: {fileID: 8300000, guid: 734c0ba0addd71e4e9d44b0df0e9a8a7, type: 3}
     volume: 0.518
     pitch: 1
     source: {fileID: 0}

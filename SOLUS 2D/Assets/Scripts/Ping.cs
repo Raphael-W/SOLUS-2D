@@ -24,7 +24,8 @@ public class Ping : MonoBehaviour
 
         while (true)
         {
-            CurrentPing = NetworkManager.Singleton.NetworkConfig.NetworkTransport.GetCurrentRtt(NetworkManager.Singleton.LocalClientId);
+            CurrentPing = (int)((NetworkManager.Singleton.LocalTime.Time) - (NetworkManager.Singleton.ServerTime.Time));
+
             PingText.text = ((int)CurrentPing + "ms").ToString();
             yield return _waitForSecondsRealtime;
         }

@@ -98,7 +98,6 @@ public class BulletController : NetworkBehaviour
         if (collision.gameObject.layer == LayerMask.NameToLayer("TileMap") && !hit)
         {
             explosionPositions = GetPositionsInRadius(Vector3Int.FloorToInt(transform.position), ExplosionRadius);
-            ServerScript.PlaySoundServerRpc("Explode", transform.position);
             foreach (Vector3Int position in explosionPositions)
             {
                 Border = ((position.x == MapSize - 1) || (position.x == 0) || (position.y == MapSize - 1) || (position.y == 0));

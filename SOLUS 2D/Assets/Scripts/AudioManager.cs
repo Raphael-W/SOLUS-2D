@@ -21,10 +21,8 @@ public class AudioManager : MonoBehaviour
         }
     }
 
-    [ClientRpc]
-    public void PlayClientRpc(string name, Vector3 position)
+    public void Play(string name, Vector3 position)
     {
-        Debug.Log("Recieved");
         Sound s = Array.Find(sounds, sound => sound.name == name);
         AudioSource.PlayClipAtPoint(s.source.clip, position, 1);
     }

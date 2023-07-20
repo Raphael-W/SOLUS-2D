@@ -9,6 +9,9 @@ public class Generation : NetworkBehaviour
     public Tilemap tilemap;
     public Tile mainTile;
 
+    private GameObject AudioManager;
+    private AudioManager AudioManagerScript;
+
     [Range(0, 100)] public int density;
     [Range(1, 20)] public int iterations;
     public int MapSize;
@@ -22,6 +25,12 @@ public class Generation : NetworkBehaviour
     private TMP_Text SeedBoxText;
 
     public bool MapLoaded;
+
+    public void Start()
+    {
+        AudioManager = GameObject.FindGameObjectWithTag("AudioManager");
+        AudioManagerScript = AudioManager.GetComponent<AudioManager>();
+    }
 
     public void LoadGame()
     {
@@ -131,5 +140,6 @@ public class Generation : NetworkBehaviour
     public void ClearTileClientRpc(Vector3Int Position)
     {
         tilemap.SetTile(Position, null);
+        AudioManagerScript.Play("Explode", Position);
     }
 }

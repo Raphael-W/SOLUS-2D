@@ -10,8 +10,7 @@ public class ServerManager : NetworkBehaviour
     private Generation generation;
     private int MapSize;
 
-    private GameObject AudioManager;
-    private AudioManager AudioManagerScript;
+    
 
     private bool ClientReady;
     private bool ServerReady;
@@ -33,9 +32,6 @@ public class ServerManager : NetworkBehaviour
         MapGenerator = GameObject.FindGameObjectWithTag("MainUniverseTag");
         generation = MapGenerator.GetComponent<Generation>();
         MapSize = generation.MapSize;
-
-        AudioManager = GameObject.FindGameObjectWithTag("AudioManager");
-        AudioManagerScript = AudioManager.GetComponent<AudioManager>();
 
         DestroyedTiles = new Vector3Int[MapSize * MapSize];
 
@@ -113,11 +109,5 @@ public class ServerManager : NetworkBehaviour
         generation.ClearTileClientRpc(Position);
         DestroyedTiles[DestroyedTileIndex] = Position;
         DestroyedTileIndex++;
-    }
-
-    [ServerRpc(RequireOwnership = false)]
-    public void PlaySoundServerRpc(string name, Vector3 position)
-    {
-        AudioManagerScript.PlayClientRpc(name, position);
     }
 }

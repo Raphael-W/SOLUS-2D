@@ -121,9 +121,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6b9115a9a09b17341928e8a3dfa41a27, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MoveSpeed: 10
-  Direction: {x: 0, y: 0, z: 0}
-  shoot: 0
+  MoveSpeed: 20
+  ExplosionRadius: 2
 --- !u!61 &2649395632790860012
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -136,7 +135,7 @@ BoxCollider2D:
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 64
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 8

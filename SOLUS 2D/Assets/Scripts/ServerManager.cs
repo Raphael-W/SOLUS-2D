@@ -8,6 +8,7 @@ public class ServerManager : NetworkBehaviour
 
     private GameObject MapGenerator;
     private Generation generation;
+    private int MapSize;
 
     private bool ClientReady;
     private bool ServerReady;
@@ -15,8 +16,12 @@ public class ServerManager : NetworkBehaviour
     public GameObject BulletPrefab;
     private GameObject SpawnedBullet;
 
+    public Vector3Int[] DestroyedTiles;
+    private int DestroyedTileIndex;
+
     public void Awake()
     {
+        DestroyedTileIndex = 0;
         DontDestroyOnLoad(gameObject);
     }
 
@@ -24,6 +29,9 @@ public class ServerManager : NetworkBehaviour
     {
         MapGenerator = GameObject.FindGameObjectWithTag("MainUniverseTag");
         generation = MapGenerator.GetComponent<Generation>();
+        MapSize = generation.MapSize;
+
+        DestroyedTiles = new Vector3Int[MapSize * MapSize];
 
         ClientReady = false;
         ServerReady = false;
@@ -34,6 +42,11 @@ public class ServerManager : NetworkBehaviour
     public void ClientConnected(ulong clientId)
     {
         ClientReady = true;
+
+        for (int TilePosIndex = 0; TilePosIndex < DestroyedTileIndex; TilePosIndex++)
+        {
+            generation.ClearTileClientRpc(DestroyedTiles[TilePosIndex]);
+        }
     }
 
     public void StartHost(string Address)
@@ -75,12 +88,24 @@ public class ServerManager : NetworkBehaviour
     }
 
     [ServerRpc(RequireOwnership = false)]
-    public void ShootBulletServerRpc(Vector3 position, Quaternion rotation, Vector3 direction, ulong ClientID)//ServerRpcParams serverRpcParams = default)
+    public void ShootBulletServerRpc(Vector3 position, Quaternion rotation, Vector3 direction, float playerSpeed, ulong ClientID)
     {
-        //var clientId = serverRpcParams.Receive.SenderClientId;
         SpawnedBullet = Instantiate(BulletPrefab, position, rotation);
         SpawnedBullet.GetComponent<NetworkObject>().SpawnWithOwnership(ClientID);
-        SpawnedBullet.GetComponent<BulletController>().ReadyToShootClientRpc(direction);
-        //SpawnedBullet.GetComponent<NetworkObject>().ChangeOwnership(ClientID);
+        SpawnedBullet.GetComponent<BulletController>().ReadyToShootClientRpc(direction, playerSpeed);
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    public void DespawnBulletServerRpc(ulong ObjectID)
+    {
+        NetworkManager.Singleton.SpawnManager.SpawnedObjects[ObjectID].gameObject.GetComponent<NetworkObject>().Despawn();
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    public void ClearTileServerRpc(Vector3Int Position)
+    {
+        generation.ClearTileClientRpc(Position);
+        DestroyedTiles[DestroyedTileIndex] = Position;
+        DestroyedTileIndex++;
     }
 }

@@ -3,13 +3,18 @@ using UnityEngine;
 using Unity.Netcode;
 using TMPro;
 using UnityEngine.UI;
-using UnityEngine.SceneManagement;
-//using UnityEngine.UIElements;
 
 public class Movement : NetworkBehaviour
 {
 
     public Rigidbody2D RigidBody;
+
+    [Header("Shoot Settings")]
+    public GameObject Gun;
+    public float Bullets;
+    private float BulletsRemaining;
+    public float ReloadSpeed;
+    public float landPrecision = 15f;
 
     private MvInputKey Key;
 
@@ -22,15 +27,8 @@ public class Movement : NetworkBehaviour
 
     private float currentRotation;
 
-    [Header("Fuel Settings")]
-
-    public float fuel = 5000000;
-    public float refuelSpeed;
-    public float landPrecision = 15f;
-    public float fuelRemaining;
-
-    private GameObject FuelPercentage;
-    private TMP_Text FuelPercentageText;
+    private GameObject BulletsDisplay;
+    private TMP_Text BulletsText;
 
     private GameObject UIHandler;
     private UIHandler UIHandlerScript;
@@ -68,6 +66,7 @@ public class Movement : NetworkBehaviour
     private RaycastHit2D SpawnCheckUpR;
     private bool Flat;
     public int SpawnSpace;
+    private bool landed;
 
     private int PlayerSpawned;
 
@@ -82,11 +81,13 @@ public class Movement : NetworkBehaviour
 
     private void Awake()
     {
+        BulletsRemaining = Bullets;
+
         MapGenerator = GameObject.FindGameObjectWithTag("MainUniverseTag");
         GenerationScript = MapGenerator.GetComponent<Generation>();
 
-        FuelPercentage = GameObject.FindGameObjectWithTag("FuelPercentage");
-        FuelPercentageText = FuelPercentage.GetComponent<TMP_Text>();
+        BulletsDisplay = GameObject.FindGameObjectWithTag("BulletsDisplay");
+        BulletsText = BulletsDisplay.GetComponent<TMP_Text>();
 
         UIHandler = GameObject.FindGameObjectWithTag("UIHandler");
         UIHandlerScript = UIHandler.GetComponent<UIHandler>();
@@ -132,8 +133,6 @@ public class Movement : NetworkBehaviour
 
             tileLayer = LayerMask.GetMask("TileMap");
             UIHandlerScript.GameUI.enabled = true;
-
-            fuelRemaining = fuel;
         }
 
         if (!IsOwner)
@@ -167,36 +166,22 @@ public class Movement : NetworkBehaviour
 
             if (Input.GetKey(KeyCode.A))
             {
-                if (fuelRemaining > 0)
-                {
-                    Key |= MvInputKey.Key_Left;
-                }
-
-                else
-                {
-                    fuelRemaining = 0;
-                }
+                Key |= MvInputKey.Key_Left;
             }
 
             if (Input.GetKey(KeyCode.D))
             {
-                if (fuelRemaining > 0)
-                {
-                    Key |= MvInputKey.Key_Right;
-                }
-
-                else
-                {
-                    fuelRemaining = 0;
-                }
+                Key |= MvInputKey.Key_Right;
             }
 
-            if (Input.GetKeyDown(KeyCode.W) ||  Input.GetKeyDown(KeyCode.Space))
+            if ((Input.GetKeyDown(KeyCode.W) ||  Input.GetKeyDown(KeyCode.Space)) && (BulletsRemaining >= 1) && (!landed))
             {
-                ServerManagerScript.ShootBulletServerRpc(transform.position, Quaternion.identity, transform.up, OwnerClientId);
+                Vector3 ShootDirection = (Gun.transform.position - transform.position).normalized;
+                ServerManagerScript.ShootBulletServerRpc(Gun.transform.position, Quaternion.identity, ShootDirection, RigidBody.velocity.magnitude, OwnerClientId);
+                BulletsRemaining -= 1;
             }
 
-            FuelPercentageText.text = (Math.Round((fuelRemaining / fuel) * 100, 0) + "%");
+            BulletsText.text = (Math.Floor(BulletsRemaining)).ToString();
             currentRotation = transform.rotation.z * 180;
 
             rayOrigin = transform.position;
@@ -211,16 +196,21 @@ public class Movement : NetworkBehaviour
 
             if ((-landPrecision <= currentRotation && currentRotation <= landPrecision) && (landCheckL.collider != null || landCheckR.collider != null))
             {
-
-                if (fuelRemaining <= fuel)
+                landed = true;
+                if (BulletsRemaining <= Bullets)
                 {
-                    fuelRemaining += refuelSpeed;
+                    BulletsRemaining += ReloadSpeed;
                 }
 
                 else
                 {
-                    fuelRemaining = fuel;
+                    BulletsRemaining = Bullets;
                 }
+            }
+
+            else
+            {
+                landed = false;
             }
         }
 
@@ -284,22 +274,16 @@ public class Movement : NetworkBehaviour
         if ((Key & MvInputKey.Key_Left) != 0) {
             prevRotation = rotationThrust;
             RotatePlayer(rotationThrust);
-            fuelRemaining -= rotationThrust;
             
         }
         if ((Key & MvInputKey.Key_Right) != 0) {
             prevRotation = -rotationThrust;
             RotatePlayer(-rotationThrust);
-            fuelRemaining -= rotationThrust;
-            
-
         }
         if (Key != MvInputKey.Key_Neutral) {
 
             if ((Key & MvInputKey.Key_Left) != 0 && (Key & MvInputKey.Key_Right) != 0) {
                 RigidBody.AddRelativeForce(Vector2.up * mainThrust * Time.deltaTime);
-                fuelRemaining -= mainThrust;
-                
             }
 
             else {

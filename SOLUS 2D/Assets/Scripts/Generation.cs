@@ -1,9 +1,10 @@
 using TMPro;
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Tilemaps;
 
-public class Generation : MonoBehaviour
+public class Generation : NetworkBehaviour
 {
     public Tilemap tilemap;
     public Tile mainTile;
@@ -121,5 +122,11 @@ public class Generation : MonoBehaviour
     public void ClearTiles()
     {
         tilemap.ClearAllTiles();
+    }
+
+    [ClientRpc]
+    public void ClearTileClientRpc(Vector3Int Position)
+    {
+        tilemap.SetTile(Position, null);
     }
 }

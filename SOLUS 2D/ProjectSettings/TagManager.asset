@@ -18,6 +18,7 @@ TagManager:
   - UISlider
   - Virtual Camera
   - ArrowUI
+  - BulletsDisplay
   layers:
   - Default
   - TransparentFX

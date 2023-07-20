@@ -37,6 +37,7 @@ public class BulletController : NetworkBehaviour
         ServerScript = Server.GetComponent<ServerManager>();
 
         MapSize = GeneratorScript.MapSize;
+        
     }
 
     [ClientRpc]
@@ -98,6 +99,7 @@ public class BulletController : NetworkBehaviour
                 Border = ((position.x == MapSize - 1) || (position.x == 0) || (position.y == MapSize - 1) || (position.y == 0));
                 if (!Border)
                 {
+                    FindObjectOfType<AudioManager>().Play("Explode");
                     ServerScript.ClearTileServerRpc(position);
                 }
             }

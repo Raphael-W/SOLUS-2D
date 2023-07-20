@@ -176,6 +176,7 @@ public class Movement : NetworkBehaviour
 
             if ((Input.GetKeyDown(KeyCode.W) ||  Input.GetKeyDown(KeyCode.Space)) && (BulletsRemaining >= 1) && (!landed))
             {
+                FindObjectOfType<AudioManager>().Play("Player Shoot");
                 Vector3 ShootDirection = (Gun.transform.position - transform.position).normalized;
                 ServerManagerScript.ShootBulletServerRpc(Gun.transform.position, Quaternion.identity, ShootDirection, RigidBody.velocity.magnitude, OwnerClientId);
                 BulletsRemaining -= 1;

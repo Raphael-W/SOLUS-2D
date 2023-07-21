@@ -95,34 +95,42 @@ public class BulletController : NetworkBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        hitSelf = ((collision.gameObject.layer == LayerMask.NameToLayer("Players")) && (OwnerClientId == collision.gameObject.GetComponent<NetworkObject>().OwnerClientId));
+        if (IsOwner)
+        {
+            hitSelf = ((collision.gameObject.layer == LayerMask.NameToLayer("Players")) && (OwnerClientId == collision.gameObject.GetComponent<NetworkObject>().OwnerClientId));
 
-        if (IsOwner && !hitSelf)
-        {
-            ServerScript.DespawnBulletServerRpc(GetComponent<NetworkObject>().NetworkObjectId);
-        }    
-        
-        if (collision.gameObject.layer == LayerMask.NameToLayer("TileMap") && !hit)
-        {
-            explosionPositions = GetPositionsInRadius(Vector3Int.FloorToInt(transform.position), ExplosionRadius);
-            foreach (Vector3Int position in explosionPositions)
+            if (IsOwner && !hitSelf)
             {
-                Border = ((position.x == MapSize - 1) || (position.x == 0) || (position.y == MapSize - 1) || (position.y == 0));
-                if (!Border)
+                ServerScript.DespawnBulletServerRpc(GetComponent<NetworkObject>().NetworkObjectId);
+            }
+
+            if (collision.gameObject.layer == LayerMask.NameToLayer("TileMap") && !hit)
+            {
+                explosionPositions = GetPositionsInRadius(Vector3Int.FloorToInt(transform.position), ExplosionRadius);
+                bool first = true;
+                foreach (Vector3Int position in explosionPositions)
                 {
-                    ServerScript.ClearTileServerRpc(position);
+                    Border = ((position.x == MapSize - 1) || (position.x == 0) || (position.y == MapSize - 1) || (position.y == 0));
+                    if (!Border && UniverseTiles.HasTile(position))
+                    {
+                        ServerScript.ClearTileServerRpc(position, first);
+                        if (first)
+                        {
+                            first = false;
+                        }
+                    }
                 }
             }
-        }
 
-        if (!hitSelf)
-        {
-            hit = true;
-        }
+            if (!hitSelf)
+            {
+                hit = true;
+            }
 
-        if ((collision.gameObject.layer == LayerMask.NameToLayer("Players")) && !hitSelf)
-        {
-            collision.gameObject.GetComponent<Movement>().health--;
+            if ((collision.gameObject.layer == LayerMask.NameToLayer("Players")) && !hitSelf)
+            {
+                ServerScript.HitPlayerServerRpc(collision.gameObject.GetComponent<NetworkObject>().OwnerClientId);
+            }
         }
     }
 }

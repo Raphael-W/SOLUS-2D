@@ -10,7 +10,7 @@ public class ServerManager : NetworkBehaviour
     private Generation generation;
     private int MapSize;
 
-    
+    private GameObject[] Players;
 
     private bool ClientReady;
     private bool ServerReady;
@@ -47,7 +47,7 @@ public class ServerManager : NetworkBehaviour
 
         for (int TilePosIndex = 0; TilePosIndex < DestroyedTileIndex; TilePosIndex++)
         {
-            generation.ClearTileClientRpc(DestroyedTiles[TilePosIndex]);
+            generation.ClearTileClientRpc(DestroyedTiles[TilePosIndex], false);
         }
     }
 
@@ -104,10 +104,20 @@ public class ServerManager : NetworkBehaviour
     }
 
     [ServerRpc(RequireOwnership = false)]
-    public void ClearTileServerRpc(Vector3Int Position)
+    public void ClearTileServerRpc(Vector3Int Position, bool first)
     {
-        generation.ClearTileClientRpc(Position);
+        generation.ClearTileClientRpc(Position, first);
         DestroyedTiles[DestroyedTileIndex] = Position;
         DestroyedTileIndex++;
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    public void HitPlayerServerRpc(ulong ClientID)
+    {
+        Players = GameObject.FindGameObjectsWithTag("Player");
+        foreach(var player in Players)
+        {
+            player.GetComponent<Movement>().PlayerHitClientRpc(ClientID);
+        }
     }
 }

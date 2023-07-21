@@ -137,9 +137,12 @@ public class Generation : NetworkBehaviour
     }
 
     [ClientRpc]
-    public void ClearTileClientRpc(Vector3Int Position)
+    public void ClearTileClientRpc(Vector3Int Position, bool first)
     {
         tilemap.SetTile(Position, null);
-        AudioManagerScript.Play("Explode", Position);
+        if (first)
+        {
+            AudioManagerScript.Play("Explode", Position);
+        }
     }
 }

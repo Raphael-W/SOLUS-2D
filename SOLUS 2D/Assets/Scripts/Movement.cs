@@ -3,6 +3,7 @@ using UnityEngine;
 using Unity.Netcode;
 using TMPro;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class Movement : NetworkBehaviour
 {
@@ -30,6 +31,9 @@ public class Movement : NetworkBehaviour
 
     private GameObject BulletsDisplay;
     private TMP_Text BulletsText;
+
+    private GameObject HealthDisplay;
+    private TMP_Text HealthText;
 
     private GameObject UIHandler;
     private UIHandler UIHandlerScript;
@@ -70,7 +74,8 @@ public class Movement : NetworkBehaviour
     public int SpawnHeadRoom;
     private bool landed;
 
-    private int PlayerSpawned;
+    public int PlayerSpawned;
+    public bool FirstSpawn;
 
     private GameObject ServerManager;
     private ServerManager ServerManagerScript;
@@ -90,6 +95,9 @@ public class Movement : NetworkBehaviour
 
         BulletsDisplay = GameObject.FindGameObjectWithTag("BulletsDisplay");
         BulletsText = BulletsDisplay.GetComponent<TMP_Text>();
+
+        HealthDisplay = GameObject.FindGameObjectWithTag("HealthDisplay");
+        HealthText = HealthDisplay.GetComponent<TMP_Text>();
 
         UIHandler = GameObject.FindGameObjectWithTag("UIHandler");
         UIHandlerScript = UIHandler.GetComponent<UIHandler>();
@@ -120,7 +128,10 @@ public class Movement : NetworkBehaviour
                 transform.position = (rayOrigin - new Vector2(0, Mathf.Min(SpawnCheckDownL.distance, SpawnCheckDownR.distance)) + new Vector2(0, 2));
                 transform.rotation = Quaternion.Euler(0f, 0, 0f);
 
-                GenerationScript.LoadGame();
+                if (SceneManager.sceneCount > 1)
+                {
+                    GenerationScript.LoadGame();
+                } 
             }
             return countdown -= 1;
         }
@@ -189,6 +200,7 @@ public class Movement : NetworkBehaviour
             }
 
             BulletsText.text = (Math.Floor(BulletsRemaining)).ToString();
+            HealthText.text = (health).ToString();
             currentRotation = transform.rotation.z * 180;
 
             rayOrigin = transform.position;
@@ -317,5 +329,19 @@ public class Movement : NetworkBehaviour
         transform.rotation = Quaternion.Lerp(transform.rotation, desiredRotation, Time.deltaTime * 100f);
 
         RigidBody.freezeRotation = false; //unfreezing rotation so the physics system can take over
+    }
+
+    [ClientRpc]
+    public void PlayerHitClientRpc(ulong PlayerHitID)
+    {
+        if (PlayerHitID == OwnerClientId)
+        {
+            health--;
+        }
+
+        if (IsOwner)
+        {
+            PlayerSpawned = 1;
+        }
     }
 }

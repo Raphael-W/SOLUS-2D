@@ -900,19 +900,31 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a3656cb9edb5d43a9a1931235592fed9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  musicMixerGroup: {fileID: 8799421337823532704, guid: 323f0aaf3fd6db94bbf9fe96f491ef23, type: 2}
+  soundsMixerGroup: {fileID: 3349106991759834079, guid: 323f0aaf3fd6db94bbf9fe96f491ef23, type: 2}
   sounds:
-  - name: Player Shoot
+  - audioType: 1
+    name: Player Shoot
     clip: {fileID: 8300000, guid: be9c7f4464be84b4896afdd396c2b377, type: 3}
     volume: 1
     pitch: 1
     spatialBlend: 1
     playOnAwake: 1
     source: {fileID: 0}
-  - name: Explode
+  - audioType: 1
+    name: Explode
     clip: {fileID: 8300000, guid: 734c0ba0addd71e4e9d44b0df0e9a8a7, type: 3}
     volume: 1
     pitch: 1
     spatialBlend: 1
+    playOnAwake: 1
+    source: {fileID: 0}
+  - audioType: 1
+    name: Button
+    clip: {fileID: 8300000, guid: 9395dbc4497ef274d95a25b322b2a044, type: 3}
+    volume: 1
+    pitch: 1
+    spatialBlend: 0
     playOnAwake: 1
     source: {fileID: 0}
 --- !u!4 &943314288

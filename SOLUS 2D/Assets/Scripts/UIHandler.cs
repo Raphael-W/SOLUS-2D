@@ -8,6 +8,9 @@ public class UIHandler : MonoBehaviour
     private GameObject ServerManager;
     private ServerManager ServerManagerScript;
 
+    private GameObject AudioManager;
+    private AudioManager AudioManagerScript;
+
     public TMP_InputField IPField;
     private string Address;
 
@@ -30,6 +33,9 @@ public class UIHandler : MonoBehaviour
 
     private bool SettingsOpen;
 
+    private Button[] Buttons;
+
+
     public void Awake()
     {
         SettingsOpen = false;
@@ -43,6 +49,20 @@ public class UIHandler : MonoBehaviour
         {
             SettingsUI.enabled = false;
         }
+
+        AudioManager = GameObject.FindGameObjectWithTag("AudioManager");
+        AudioManagerScript = AudioManager.GetComponent<AudioManager>();
+
+        Buttons = FindObjectsOfType<Button>();
+        foreach (Button button in Buttons)
+        {
+            button.onClick.AddListener(ClickSound);
+        }
+    }
+
+    public void ClickSound()
+    {
+        AudioManagerScript.PlayGlobal("Button");
     }
 
     private void ConnectServerManager()
@@ -112,6 +132,7 @@ public class UIHandler : MonoBehaviour
     public void OpenSettings()
     {
         UISlider.value = PlayerPrefs.GetFloat("UISize", 10);
+        SoundsSlider.value = PlayerPrefs.GetFloat("Sounds", 0.5f);
 
         SettingsUI.enabled = true;
         SettingsOpen = true;
@@ -131,6 +152,8 @@ public class UIHandler : MonoBehaviour
     public void SoundsChanged()
     {
         PlayerPrefs.SetFloat("Sounds", SoundsSlider.value);
+        SoundsSliderText.text = ((int)(SoundsSlider.value * 100)).ToString();
+        AudioManagerScript.SetVolume("Sounds Volume", Mathf.Log10(SoundsSlider.value) * 20);
     }
 
     public void SetUISize(float size)
@@ -182,7 +205,6 @@ public class UIHandler : MonoBehaviour
                 UISliderText.text = UISlider.value.ToString();
             }
 
-            SoundsSliderText.text = SoundsSlider.value.ToString();
         }
     }
 }

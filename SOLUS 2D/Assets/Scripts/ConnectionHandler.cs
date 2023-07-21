@@ -5,15 +5,18 @@ using TMPro;
 public class ConnectionHandler : MonoBehaviour
 {
     public int MaxPlayers;
-    public GameObject ErrorMessage;
-    private GameObject InstantiatedErrorMessage;
-    private GameObject ErrorMessageText;
     private string DisconnectReason;
+
+    private GameObject UIHandler;
+    private UIHandler UIHandlerScript;
 
     private void Start()
     {
         NetworkManager.Singleton.ConnectionApprovalCallback += ApprovalCheck;
         NetworkManager.Singleton.OnClientDisconnectCallback += OnClientDisconnectCallback;
+
+        UIHandler = GameObject.FindGameObjectWithTag("UIHandler");
+        UIHandlerScript = UIHandler.GetComponent<UIHandler>();
     }
 
     private void ApprovalCheck(NetworkManager.ConnectionApprovalRequest request, NetworkManager.ConnectionApprovalResponse response)
@@ -25,7 +28,7 @@ public class ConnectionHandler : MonoBehaviour
         if (NetworkManager.Singleton.ConnectedClients.Count >= MaxPlayers)
         {
             response.Approved = false;
-            response.Reason = "Server is Full";
+            response.Reason = "ERROR: Server is Full";
         }
 
         response.Pending = false;
@@ -37,7 +40,7 @@ public class ConnectionHandler : MonoBehaviour
         {
             if (NetworkManager.Singleton.DisconnectReason == string.Empty)
             {
-                DisconnectReason = "Disconnected";
+                DisconnectReason = "ERROR: Disconnected";
             }
 
             else
@@ -45,9 +48,7 @@ public class ConnectionHandler : MonoBehaviour
                 DisconnectReason = NetworkManager.Singleton.DisconnectReason;
             }
 
-            InstantiatedErrorMessage = Instantiate(ErrorMessage, new Vector3(0, 0, 0), Quaternion.identity);
-            ErrorMessageText = InstantiatedErrorMessage.transform.Find("Message").gameObject;
-            ErrorMessageText.GetComponent<TMP_Text>().text = ("ERROR: " + DisconnectReason);
+            UIHandlerScript.Error(DisconnectReason);
         }
     }
 

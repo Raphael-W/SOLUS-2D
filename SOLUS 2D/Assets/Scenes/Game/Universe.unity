@@ -518,6 +518,7 @@ MonoBehaviour:
   - {fileID: 1280524237}
   UISliderText: {fileID: 1764699828}
   SoundsSliderText: {fileID: 1849204650}
+  ErrorMessage: {fileID: 15175003941211617, guid: cd459b1e68e8a5c4099d568d411506b5, type: 3}
 --- !u!4 &224218328
 Transform:
   m_ObjectHideFlags: 0
@@ -722,7 +723,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 5
+  m_text: 3
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 72bd60030918fdd428e5ced972ffa2fb, type: 2}
   m_sharedMaterial: {fileID: 7642011430162691523, guid: 72bd60030918fdd428e5ced972ffa2fb, type: 2}
@@ -1503,7 +1504,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MaxPlayers: 5
-  ErrorMessage: {fileID: 15175003941211617, guid: cd459b1e68e8a5c4099d568d411506b5, type: 3}
 --- !u!4 &1452885135
 Transform:
   m_ObjectHideFlags: 0

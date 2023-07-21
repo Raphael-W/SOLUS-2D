@@ -1,4 +1,5 @@
 using TMPro;
+using Unity.Networking.Transport.Error;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -34,6 +35,10 @@ public class UIHandler : MonoBehaviour
     private bool SettingsOpen;
 
     private Button[] Buttons;
+
+    public GameObject ErrorMessage;
+    private GameObject InstantiatedErrorMessage;
+    private GameObject ErrorMessageText;
 
 
     public void Awake()
@@ -189,6 +194,18 @@ public class UIHandler : MonoBehaviour
     public void Quit()
     {
         Application.Quit();
+    }
+
+    public void Close()
+    {
+        Destroy(transform.parent.gameObject);
+    }
+
+    public void Error(string message)
+    {
+        InstantiatedErrorMessage = Instantiate(ErrorMessage, new Vector3(0, 0, 0), Quaternion.identity);
+        ErrorMessageText = InstantiatedErrorMessage.transform.Find("Message").gameObject;
+        ErrorMessageText.GetComponent<TMP_Text>().text = (message);
     }
 
     public void Update()

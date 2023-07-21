@@ -173,6 +173,12 @@ public class Movement : NetworkBehaviour
 
     void Update()
     {
+        if (health <= 0 && IsOwner)
+        {
+            NetworkManager.Shutdown();
+            UIHandlerScript.Error("HAHA biiaaatch! You lose!");
+        }
+
         if ((PlayerSpawned >= 0) && IsOwner)
         {
             PlayerSpawned = FindSpawnPoint(PlayerSpawned);

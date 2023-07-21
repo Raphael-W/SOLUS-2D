@@ -127,6 +127,7 @@ public class Movement : NetworkBehaviour
             {
                 transform.position = (rayOrigin - new Vector2(0, Mathf.Min(SpawnCheckDownL.distance, SpawnCheckDownR.distance)) + new Vector2(0, 2));
                 transform.rotation = Quaternion.Euler(0f, 0, 0f);
+                BulletsRemaining = Bullets;
 
                 if (SceneManager.sceneCount > 1)
                 {
@@ -175,8 +176,17 @@ public class Movement : NetworkBehaviour
     {
         if (health <= 0 && IsOwner)
         {
-            NetworkManager.Shutdown();
-            UIHandlerScript.Error("HAHA biiaaatch! You lose!");
+            UIHandlerScript.Error("HAHA biiaaatch! You lose!", out GameObject message);
+
+            if (!IsHost)
+            {
+                NetworkManager.Shutdown();
+            }
+            else
+            {
+                GameObject.FindGameObjectWithTag("ErrorTextOK").GetComponent<TMP_Text>().text = "Stop Server";
+                GetComponent<NetworkObject>().Despawn();
+            }            
         }
 
         if ((PlayerSpawned >= 0) && IsOwner)

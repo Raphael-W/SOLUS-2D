@@ -201,7 +201,7 @@ public class UIHandler : MonoBehaviour
         Destroy(transform.parent.gameObject);
     }
 
-    public void Error(string message)
+    public void Error(string message, out GameObject InstantiatedErrorMessage)
     {
         InstantiatedErrorMessage = Instantiate(ErrorMessage, new Vector3(0, 0, 0), Quaternion.identity);
         ErrorMessageText = InstantiatedErrorMessage.transform.Find("Message").gameObject;
@@ -221,7 +221,6 @@ public class UIHandler : MonoBehaviour
             {
                 UISliderText.text = UISlider.value.ToString();
             }
-
         }
     }
 }

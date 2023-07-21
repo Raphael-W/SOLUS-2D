@@ -2,6 +2,8 @@ using UnityEngine;
 using Unity.Netcode;
 using Unity.Netcode.Transports.UTP;
 using System.Xml;
+using UnityEngine.UI;
+using System.Collections.Generic;
 
 public class ServerManager : NetworkBehaviour
 {
@@ -12,11 +14,6 @@ public class ServerManager : NetworkBehaviour
     private int MapSize;
 
     private GameObject[] Players;
-    private GameObject LastPlayer;
-    private int MaxPlayers;
-
-    private GameObject UIHandler;
-    private UIHandler UIHandlerScript;
 
     private bool ClientReady;
     private bool ServerReady;
@@ -39,15 +36,10 @@ public class ServerManager : NetworkBehaviour
         generation = MapGenerator.GetComponent<Generation>();
         MapSize = generation.MapSize;
 
-        UIHandler = GameObject.FindGameObjectWithTag("UIHandler");
-        UIHandlerScript = UIHandler.GetComponent<UIHandler>();
-
         DestroyedTiles = new Vector3Int[MapSize * MapSize];
 
         ClientReady = false;
         ServerReady = false;
-
-        MaxPlayers = 0;
 
         NetworkManager.Singleton.OnClientConnectedCallback += ClientConnected;
     }
@@ -97,18 +89,6 @@ public class ServerManager : NetworkBehaviour
             Seed();
             ClientReady = false;
             ServerReady = false;
-        }
-
-        Players = GameObject.FindGameObjectsWithTag("Player");
-        if (Players.Length > MaxPlayers)
-        {
-            MaxPlayers = Players.Length;
-        }
-
-        if ((Players.Length == 1) && MaxPlayers > 1 && IsOwner)
-        {
-            NetworkManager.Shutdown();
-            UIHandlerScript.Error("YEEES! You Won!");
         }
     }
 

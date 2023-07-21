@@ -21,6 +21,7 @@ TagManager:
   - BulletsDisplay
   - AudioManager
   - HealthDisplay
+  - ErrorTextOK
   layers:
   - Default
   - TransparentFX

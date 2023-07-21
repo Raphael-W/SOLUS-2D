@@ -48,7 +48,7 @@ public class ConnectionHandler : MonoBehaviour
                 DisconnectReason = NetworkManager.Singleton.DisconnectReason;
             }
 
-            UIHandlerScript.Error(DisconnectReason);
+            UIHandlerScript.Error(DisconnectReason, out GameObject message);
         }
     }
 

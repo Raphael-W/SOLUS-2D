@@ -176,7 +176,7 @@ public class Movement : NetworkBehaviour
     {
         if (health <= 0 && IsOwner)
         {
-            UIHandlerScript.Error("HAHA! You lose!", out GameObject message);
+            UIHandlerScript.Error("HAHA! Biiaaatch! You lose!", out GameObject message);
 
             if (!IsHost)
             {
